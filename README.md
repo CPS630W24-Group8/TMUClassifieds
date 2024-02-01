@@ -10,7 +10,7 @@ Project is set up with a basic NodeJS and Express server. Server code are locate
 
 #### 2. Client (Front-end)
 
-Project is set up with a ReactJS app using Bootstrap styling. Client code are located in [root/tmuclassifieds-clients](https://github.com/CPS630W24-Group8/TMUClassifieds/tmuclassifieds-client). Routing is also set up in client.
+Project is set up with a ReactJS app using Bootstrap styling. Client code are located in [root/tmuclassifieds-clients](https://github.com/CPS630W24-Group8/TMUClassifieds/tree/main/tmuclassifieds-client). Routing is also set up in client.
 
 ### How to run server
 
