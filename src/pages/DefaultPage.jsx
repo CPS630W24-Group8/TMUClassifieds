@@ -1,9 +1,12 @@
 import React from "react";
+import Navbar from "../components/Navbar";
 
 const DefaultPage = () => {
   return (
     <div>
-      404 Page Not Found
+      <Navbar />
+      <br />
+      <p className="fs-2 text-center">404 Page Not Found</p>
     </div>
   );
 }
