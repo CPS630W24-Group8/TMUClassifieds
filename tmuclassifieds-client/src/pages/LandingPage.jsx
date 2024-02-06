@@ -8,9 +8,19 @@ const LandingPage = () => {
     <div>
       <Navbar />
 
+      <div>
+        <br />
+        <h1 className="text-center">Welcome to TMU Classifieds</h1>
+        <p className="text-center text-secondary">Find what you need or offer what you have within the TMU community</p>
+      </div>
+
+      <hr />
+
+      {/* User login/register */}
       <div className="container">
         <div className="row">
           <div className="col">
+            {/* https://getbootstrap.com/docs/5.3/components/accordion/ */}
             <div className="accordion" id="authenticationAccordion">
               <div className="accordion-item">
                 <h2 className="accordion-header">
