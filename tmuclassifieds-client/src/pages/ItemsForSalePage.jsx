@@ -2,23 +2,28 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import Item from "../components/Item";
+import ItemCard from "../components/ItemCard";
 
-const ItemsForSalePage = () => {
+const ItemCardsForSalePage = () => {
   return (
     <div>
-        <Navbar />
-        <Header />
-        <br />
-        <p className="fs-3 text-center">Items For Sale</p>
-        <div className="container overflow-hidden">
-            <div class="row gy-5">
-                <Item itemName="Math Textbook - Calculus 101" image="imageIcon.png" description="Description of the textbook, condition, and other details." />
-            </div>
+      <Navbar />
+      <Header title="Items for sale" />
+      <br />
+
+      <div className="container">
+        <div className="row justify-content-center">
+          <div className="col-md">
+            <ItemCard itemName="Math Textbook - Calculus 101" image="imageIcon.png" description="Description of the textbook, condition, and other details." />
+          </div>
+          <div className="col-md"></div>
+          <div className="col-md"></div>
         </div>
-        <Footer />
+      </div>
+
+      <Footer />
     </div>
   );
 }
 
-export default ItemsForSalePage;
+export default ItemCardsForSalePage;
