@@ -2,7 +2,7 @@ import React from "react";
 
 const ItemCard = (props) => {
 	return (
-		<div className="card w-100 h-100" style={{ backgroundColor: '#08314A' }}>
+		<div className="card" style={{ backgroundColor: '#08314A' }}>
 			<img src={props.image} alt="" className="card-img-top img-thumbnail img-fluid" />
 			<div className="card-body">
 				<h4 className="card-title">{props.itemName}</h4>

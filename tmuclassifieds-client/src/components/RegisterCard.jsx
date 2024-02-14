@@ -29,7 +29,7 @@ const RegisterCard = () => {
     return true;
   };
 
-  const register = (event) => {
+  const register = async (event) => {
     event.preventDefault();
 
     if (validateForm()) {
@@ -37,8 +37,14 @@ const RegisterCard = () => {
       console.log("Email:", email);
       console.log("Password:", password);
       console.log("Confirm Password:", passwordConfirm);
-    } else {
-      bootstrap.Toast.getOrCreateInstance(document.getElementById("passwordWarningToast")).show();
+
+      const response = await fetch("http://localhost:3001/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify({ email: email, password: password }),
+        headers: { "Content-Type": "application/json" }
+      });
+      const data = await response.json();
+      console.log(data);
     }
   };
 
@@ -47,37 +53,37 @@ const RegisterCard = () => {
       <form onSubmit={register}>
         <div>
           <label htmlFor="registerEmail" className="form-label">Email address *</label>
-          <input 
-            type="email" 
-            className="form-control" 
-            id="registerEmail" 
+          <input
+            type="email"
+            className="form-control"
+            id="registerEmail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required 
+            required
           />
         </div>
         <br />
         <div>
           <label htmlFor="registerPassword" className="form-label">Password *</label>
-          <input 
-            type="password" 
-            className="form-control" 
-            id="registerPassword" 
+          <input
+            type="password"
+            className="form-control"
+            id="registerPassword"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required 
+            required
           />
         </div>
         <br />
         <div>
           <label htmlFor="registerConfirmPassword" className="form-label">Confirm password *</label>
-          <input 
-            type="password" 
-            className="form-control" 
-            id="registerConfirmPassword" 
+          <input
+            type="password"
+            className="form-control"
+            id="registerConfirmPassword"
             value={passwordConfirm}
             onChange={(e) => setPasswordConfirm(e.target.value)}
-            required 
+            required
           />
         </div>
         <br />
@@ -93,7 +99,7 @@ const RegisterCard = () => {
             <button type="button" className="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
           </div>
           <div className="toast-body">
-              {errorMessage}
+            {errorMessage}
           </div>
         </div>
       </div>

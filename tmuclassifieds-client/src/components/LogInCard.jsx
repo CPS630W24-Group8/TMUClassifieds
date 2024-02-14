@@ -6,24 +6,24 @@ const LogInCard = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const validateForm = () => {
-   
+
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    
+
     if (!email.trim() || !emailPattern.test(email)) {
       setErrorMessage("Please enter a valid email address.");
       return false;
     }
-   
+
     if (!password.trim() || password.length < 6) {
       setErrorMessage("Password must be at least 6 characters long.");
       return false;
     }
-    
+
     setErrorMessage("");
     return true;
   };
 
-  const logIn = (event) => {
+  const logIn = async (event) => {
     event.preventDefault();
 
     if (validateForm()) {
@@ -31,6 +31,14 @@ const LogInCard = () => {
       console.log("Logging in...");
       console.log("Email:", email);
       console.log("Password:", password);
+
+      const response = await fetch("http://localhost:3001/api/auth/login", {
+        method: "POST",
+        body: JSON.stringify({ email: email, password: password }),
+        headers: { "Content-Type": "application/json" }
+      });
+      const data = await response.json();
+      console.log(data);
     }
   };
 
@@ -39,25 +47,25 @@ const LogInCard = () => {
       <form onSubmit={logIn}>
         <div>
           <label htmlFor="loginEmail" className="form-label">Email address *</label>
-          <input 
-            type="email" 
-            className="form-control" 
-            id="loginEmail" 
+          <input
+            type="email"
+            className="form-control"
+            id="loginEmail"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required 
+            required
           />
         </div>
         <br />
         <div>
           <label htmlFor="loginPassword" className="form-label">Password *</label>
-          <input 
-            type="password" 
-            className="form-control" 
-            id="loginPassword" 
+          <input
+            type="password"
+            className="form-control"
+            id="loginPassword"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required 
+            required
           />
         </div>
         <br />
