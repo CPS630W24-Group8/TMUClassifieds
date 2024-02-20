@@ -13,9 +13,9 @@ const Navbar = () => {
 
         <div className="collapse navbar-collapse" id="navBarContent">
           <div className="navbar-nav">
-            <a className="nav-link" href="/itemsWanted">Items Wanted</a>
-            <a className="nav-link" href="/itemsForSale">Items for Sale</a>
-            <a className="nav-link" href="/AcademicServices">Academic Services</a>
+            <a className="nav-link" href="/items-wanted">Items Wanted</a>
+            <a className="nav-link" href="/items-for-sale">Items for Sale</a>
+            <a className="nav-link" href="/academic-services">Academic Services</a>
           </div>
         </div>
       </div>

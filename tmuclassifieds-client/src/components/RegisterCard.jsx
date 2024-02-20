@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import * as bootstrap from "bootstrap/dist/js/bootstrap.min";
+import { setCookie } from "../cookieManager";
+// import * as bootstrap from "bootstrap/dist/js/bootstrap.min";
 
-const RegisterCard = () => {
+const RegisterCard = ({ onRegistered }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
@@ -32,19 +33,18 @@ const RegisterCard = () => {
   const register = async (event) => {
     event.preventDefault();
 
-    if (validateForm()) {
-      console.log("Registering...");
-      console.log("Email:", email);
-      console.log("Password:", password);
-      console.log("Confirm Password:", passwordConfirm);
+    if (!validateForm()) return;
 
-      const response = await fetch("http://localhost:3001/api/auth/register", {
-        method: "POST",
-        body: JSON.stringify({ email: email, password: password }),
-        headers: { "Content-Type": "application/json" }
-      });
-      const data = await response.json();
-      console.log(data);
+    // Proceed with register
+    const response = await fetch("http://localhost:3001/api/auth/register", {
+      method: "POST",
+      body: JSON.stringify({ email: email, password: password }),
+      headers: { "Content-Type": "application/json" }
+    });
+
+    if (response.status === 200) {
+      setCookie("email", email);
+      onRegistered();
     }
   };
 

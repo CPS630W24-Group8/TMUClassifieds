@@ -7,10 +7,30 @@ import SearchBar from "../components/SearchBar";
 
 const ItemsWantedPage = () => {
   const itemsData = [
-    { id: 1, itemName: 'Scientific calculator', image: 'imageIcon.png', description: 'The calculator must be unbroken and a scientific calculator.' },
-    { id: 2, itemName: 'Computer Security (Art and Science), 2nd Edition', image: 'ComputerSecurity2ndEdition.jpg', description: 'The textbook by Mat Bishop and the print ISBN is 9780321712332. It needs to be brand new.' },
-    { id: 3, itemName: 'Thinking as Computation: A First Course by Hector Levesque', image: 'imageIcon.png', description: 'Textbook can be online, brand new or used. Please contact ASAP.' },
-    { id: 4, itemName: 'Math Textbook - Calculus 101', image: 'imageIcon.png', description: 'Description of the textbook, condition, and other details.' },
+    {
+      id: 1,
+      itemName: 'Scientific calculator',
+      image: 'imageIcon.png',
+      description: 'The calculator must be unbroken and a scientific calculator.'
+    },
+    {
+      id: 2,
+      itemName: 'Computer Security (Art and Science), 2nd Edition',
+      image: 'ComputerSecurity2ndEdition.jpg',
+      description: 'The textbook by Mat Bishop and the print ISBN is 9780321712332. It needs to be brand new.'
+    },
+    {
+      id: 3,
+      itemName: 'Thinking as Computation: A First Course by Hector Levesque',
+      image: 'imageIcon.png',
+      description: 'Textbook can be online, brand new or used. Please contact ASAP.'
+    },
+    {
+      id: 4,
+      itemName: 'Math Textbook - Calculus 101',
+      image: 'imageIcon.png',
+      description: 'Description of the textbook, condition, and other details.'
+    },
   ];
 
   const [searchInput, setSearchInput] = useState('');
@@ -30,11 +50,11 @@ const ItemsWantedPage = () => {
       <Header title="Items wanted" />
       <br />
 
-      <div className="search-bar-container">
-        <SearchBar searchInput={searchInput} handleSearchChange={handleSearchChange} />
-      </div>
-
       <div className="container">
+        <div className="col">
+          <SearchBar searchInput={searchInput} handleSearchChange={handleSearchChange} />
+        </div>
+
         {filteredItems.length > 0 ? (
           <div className="row justify-content-center">
             {filteredItems.map(item => (

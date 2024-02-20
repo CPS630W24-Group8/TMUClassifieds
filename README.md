@@ -14,7 +14,7 @@ Project is set up with a ReactJS app using Bootstrap styling. Client code are lo
 
 ### How to run server
 
-Remember to install [NodeJS](https://nodejs.org/en) first.
+Remember to install [NodeJS](https://nodejs.org/en) and [MongoDB](https://www.mongodb.com/try/download/community) first.
 
 To run server:
 

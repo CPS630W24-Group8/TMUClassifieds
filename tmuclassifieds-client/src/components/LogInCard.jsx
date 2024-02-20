@@ -1,24 +1,21 @@
 import React, { useState } from "react";
+import { setCookie, getCookie } from "../cookieManager";
 
-const LogInCard = () => {
+const LogInCard = ({ onLoggedIn }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   const validateForm = () => {
-
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
     if (!email.trim() || !emailPattern.test(email)) {
       setErrorMessage("Please enter a valid email address.");
       return false;
     }
-
     if (!password.trim() || password.length < 6) {
       setErrorMessage("Password must be at least 6 characters long.");
       return false;
     }
-
     setErrorMessage("");
     return true;
   };
@@ -26,19 +23,18 @@ const LogInCard = () => {
   const logIn = async (event) => {
     event.preventDefault();
 
-    if (validateForm()) {
-      // Proceed with login
-      console.log("Logging in...");
-      console.log("Email:", email);
-      console.log("Password:", password);
+    if (!validateForm()) return;
 
-      const response = await fetch("http://localhost:3001/api/auth/login", {
-        method: "POST",
-        body: JSON.stringify({ email: email, password: password }),
-        headers: { "Content-Type": "application/json" }
-      });
-      const data = await response.json();
-      console.log(data);
+    // Proceed with login
+    const response = await fetch("http://localhost:3001/api/auth/login", {
+      method: "POST",
+      body: JSON.stringify({ email: email, password: password }),
+      headers: { "Content-Type": "application/json" }
+    });
+
+    if (response.status === 200) {
+      setCookie("email", email);
+      onLoggedIn();
     }
   };
 
@@ -71,7 +67,6 @@ const LogInCard = () => {
         <br />
         {/* Display error message if present */}
         {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
-        <br />
         <div className="form-check">
           <input type="checkbox" className="form-check-input" id="rememberCheck" />
           <label className="form-check-label" htmlFor="rememberCheck">Remember me</label>

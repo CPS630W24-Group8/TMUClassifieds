@@ -2,7 +2,7 @@
 const mongoose = require("mongoose");
 const localDB = "mongodb://localhost:27017/tmuclassifieds";
 
-// connect to local mongoDB database
+// Connect to local mongoDB database
 const connectDB = async () => {
   await mongoose.connect(localDB, {
     useNewUrlParser: true,

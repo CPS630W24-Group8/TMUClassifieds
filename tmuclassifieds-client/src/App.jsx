@@ -15,9 +15,9 @@ const App = () => {
       <Routes>
         <Route path="/" Component={LandingPage} />
         <Route path="*" Component={DefaultPage}/>
-        <Route path="/itemsWanted" Component={ItemsWantedPage} />
-        <Route path="/itemsForSale" Component={ItemsForSalePage} />
-        <Route path="/AcademicServices" Component={AcademicServicesPage} />
+        <Route path="/items-wanted" Component={ItemsWantedPage} />
+        <Route path="/items-for-sale" Component={ItemsForSalePage} />
+        <Route path="/academic-services" Component={AcademicServicesPage} />
       </Routes>
     </BrowserRouter>
   );
