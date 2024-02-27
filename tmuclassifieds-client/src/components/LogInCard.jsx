@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { setCookie, getCookie } from "../cookieManager";
+import { setCookie } from "../cookieManager";
 
 const LogInCard = ({ onLoggedIn }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [remember, setRemember] = useState(false);
 
   const validateForm = () => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -33,8 +34,11 @@ const LogInCard = ({ onLoggedIn }) => {
     });
 
     if (response.status === 200) {
-      setCookie("email", email);
+      // Login is valid for 1 month if the checkbox is checked
+      setCookie("email", email, remember ? 2628000 : "");
       onLoggedIn();
+    } else {
+      setErrorMessage(`Error: ${response.status} ${response.statusText}`);
     }
   };
 
@@ -48,7 +52,7 @@ const LogInCard = ({ onLoggedIn }) => {
             className="form-control"
             id="loginEmail"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(event) => setEmail(event.target.value)}
             required
           />
         </div>
@@ -60,7 +64,7 @@ const LogInCard = ({ onLoggedIn }) => {
             className="form-control"
             id="loginPassword"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(event) => setPassword(event.target.value)}
             required
           />
         </div>
@@ -68,7 +72,13 @@ const LogInCard = ({ onLoggedIn }) => {
         {/* Display error message if present */}
         {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
         <div className="form-check">
-          <input type="checkbox" className="form-check-input" id="rememberCheck" />
+          <input
+            type="checkbox"
+            className="form-check-input"
+            id="rememberCheck"
+            value={remember}
+            onChange={(event) => setRemember(event.target.checked)}
+          />
           <label className="form-check-label" htmlFor="rememberCheck">Remember me</label>
         </div>
         <br />

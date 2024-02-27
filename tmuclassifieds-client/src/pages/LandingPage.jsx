@@ -8,18 +8,15 @@ import { getCookie } from "../cookieManager";
 
 const LandingPage = () => {
   const [loggedIn, setLoggedIn] = useState(0);
-
-  // If user is already logged in
   useEffect(() => {
-    setLoggedIn(getCookie("email") != "");
-  });
+    setLoggedIn(getCookie("email") !== "");
+  }, []);
 
-  return (
-    <div>
-      <Navbar />
+  if (loggedIn) {
+    return (
+      <div>
+        <Navbar />
 
-      {loggedIn
-        ?
         <div>
           <Header title="Welcome to TMU Classifieds" description="Find what you need or offer what you have within the TMU community." />
           <br />
@@ -27,9 +24,21 @@ const LandingPage = () => {
             <p className="fs-5 text-center">Some text here to describe the web site</p>
           </div>
         </div>
-        :
-        < div className="container">
+
+        <Footer />
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <Navbar />
+
+        <div>
+          <Header title="Welcome to TMU Classifieds" description="Find what you need or offer what you have within the TMU community." />
           <br />
+        </div>
+
+        < div className="container">
           <div className="accordion" id="authenticationAccordion">
             <div className="accordion-item">
               <h2 className="accordion-header">
@@ -57,14 +66,11 @@ const LandingPage = () => {
             </div>
           </div>
         </div>
-      }
 
-
-
-      <Footer />
-
-    </div >
-  )
+        <Footer />
+      </div >
+    );
+  }
 }
 
 export default LandingPage;

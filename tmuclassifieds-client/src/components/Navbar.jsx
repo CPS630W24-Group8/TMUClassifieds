@@ -1,7 +1,13 @@
 import React from "react";
+import { setCookie } from "../cookieManager";
 
 // https://getbootstrap.com/docs/5.3/components/navbar/
 const Navbar = () => {
+  const logout = () => {
+    setCookie("email", "");
+    window.location = "/";
+  };
+
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary">
       <div className="container-fluid">
@@ -12,11 +18,12 @@ const Navbar = () => {
         </button>
 
         <div className="collapse navbar-collapse" id="navBarContent">
-          <div className="navbar-nav">
+          <div className="navbar-nav me-auto">
             <a className="nav-link" href="/items-wanted">Items Wanted</a>
             <a className="nav-link" href="/items-for-sale">Items for Sale</a>
             <a className="nav-link" href="/academic-services">Academic Services</a>
           </div>
+          <button type="button" className="btn btn-secondary" onClick={logout}>Logout</button>
         </div>
       </div>
     </nav>

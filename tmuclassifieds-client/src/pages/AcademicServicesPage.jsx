@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ItemCard from "../components/ItemCard";
 import SearchBar from "../components/SearchBar";
+import UnauthDisplay from "../components/UnauthDisplay";
+import { getCookie } from "../cookieManager";
 
 const AcademicServicesPage = () => {
+  const [loggedIn, setLoggedIn] = useState(0);
+  useEffect(() => {
+    setLoggedIn(getCookie("email") !== "");
+  }, []);
+
   const itemsData = [
     {
       id: 1,
@@ -43,6 +50,19 @@ const AcademicServicesPage = () => {
     const filtered = itemsData.filter(item => item.itemName.toLowerCase().includes(input.toLowerCase()));
     setFilteredItems(filtered);
   };
+
+  // Do not render content if user is not logged in
+  if (!loggedIn) {
+    return (
+      <div>
+        <Navbar />
+        <Header title="Academic services" />
+        <br />
+        <UnauthDisplay />
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div>
