@@ -1,17 +1,43 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import ItemCard from "../components/ItemCard";
+import ServiceCard from "../components/ServiceCard";
 import SearchBar from "../components/SearchBar";
 import UnauthDisplay from "../components/UnauthDisplay";
 import { getCookie } from "../cookieManager";
+import AddServiceCard from "../components/AddServiceCard";
 
 const AcademicServicesPage = () => {
   const [loggedIn, setLoggedIn] = useState(0);
+  const [searchInput, setSearchInput] = useState('');
+  // const [filteredItems, setFilteredItems] = useState(itemsData);
+  const [filteredItems, setFilteredItems] = useState();
+  const [allService, setAllService] = useState(null);
+
+  useEffect(() => {getServices()},[]);
   useEffect(() => {
     setLoggedIn(getCookie("email") !== "");
   }, []);
+
+  // get academic services from the database
+  const getServices = async() => {
+    let result = await axios.get("http://localhost:3001/api/service/get-service");
+    result = result.data.data
+
+    //splitting the list of services into sub arrays of 3s
+    let serviceList = [];
+    while (Math.floor(result.length/ 3) >= 1) {
+      const anArray = result.splice(0, 3);
+      serviceList.push(anArray);
+    }
+    if (result.length > 0) {
+      serviceList.push(result);
+    }
+    console.log("serviceList: ", serviceList);
+    setAllService(serviceList);
+  }
 
   const itemsData = [
     {
@@ -40,9 +66,6 @@ const AcademicServicesPage = () => {
     },
   ];
 
-  const [searchInput, setSearchInput] = useState('');
-  const [filteredItems, setFilteredItems] = useState(itemsData);
-
   // Handle search
   const handleSearchChange = (e) => {
     const input = e.target.value;
@@ -68,24 +91,20 @@ const AcademicServicesPage = () => {
     <div>
       <Navbar />
       <Header title="Academic services" />
-      <br />
+      <AddServiceCard modalTitle="Add a new service" buttonTitle="Add service" />
 
       <div className="container">
-        <div className="col">
-          <SearchBar searchInput={searchInput} handleSearchChange={handleSearchChange} />
-        </div>
-
-        {filteredItems.length > 0 ? (
-          <div className="row justify-content-center">
-            {filteredItems.map(item => (
-              <div className="col-sm-3" key={item.id}>
-                <ItemCard itemName={item.itemName} image={item.image} description={item.description} />
+        {allService == null 
+          ? ""
+          : allService.map(ServiceRow =>
+            <div className="row justify-content-center"> {ServiceRow.map(service => 
+              <div className="col-md">
+                <ServiceCard serviceName={service.title} description={service.description} />
               </div>
-            ))}
-          </div>
-        ) : (
-          <p>No items match your search.</p>
-        )}
+            )}</div>
+          )}
+
+          
       </div>
 
       <Footer />

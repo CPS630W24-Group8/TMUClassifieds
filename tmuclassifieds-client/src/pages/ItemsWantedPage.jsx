@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -6,12 +7,37 @@ import ItemCard from "../components/ItemCard";
 import SearchBar from "../components/SearchBar";
 import UnauthDisplay from "../components/UnauthDisplay";
 import { getCookie } from "../cookieManager";
+import AddItemCard from "../components/AddItemCard";
 
 const ItemsWantedPage = () => {
   const [loggedIn, setLoggedIn] = useState(0);
+  const [searchInput, setSearchInput] = useState('');
+  // const [filteredItems, setFilteredItems] = useState(itemsData);
+  const [filteredItems, setFilteredItems] = useState();
+  const [allItem, setAllItem] = React.useState(null);
+
   useEffect(() => {
     setLoggedIn(getCookie("email") !== "");
   }, []);
+  useEffect(() => {getItems()},[]);
+  
+  // get all items wanted from the database
+  const getItems = async() => {
+    let result = await axios.get("http://localhost:3001/api/item/get-item-wanted");
+    result = result.data.data
+
+    //splitting the list of items into sub arrays of 3s
+    let itemList = [];
+    while (Math.floor(result.length/ 3) >= 1) {
+      const anArray = result.splice(0, 3);
+      itemList.push(anArray);
+    }
+    if (result.length > 0) {
+      itemList.push(result);
+    }
+    console.log("itemList: ", itemList);
+    setAllItem(itemList);
+  }
 
   const itemsData = [
     {
@@ -40,9 +66,6 @@ const ItemsWantedPage = () => {
     },
   ];
 
-  const [searchInput, setSearchInput] = useState('');
-  const [filteredItems, setFilteredItems] = useState(itemsData);
-
   // Handle search
   const handleSearchChange = (e) => {
     const input = e.target.value;
@@ -63,31 +86,24 @@ const ItemsWantedPage = () => {
       </div>
     );
   }
-
+  
   return (
     <div>
       <Navbar />
       <Header title="Items wanted" />
-      <br />
+      <AddItemCard modalTitle="Add a new item" buttonTitle="Add item" type="items wanted" />
 
       <div className="container">
-        <div className="col">
-          <SearchBar searchInput={searchInput} handleSearchChange={handleSearchChange} />
-        </div>
-
-        {filteredItems.length > 0 ? (
-          <div className="row justify-content-center">
-            {filteredItems.map(item => (
-              <div className="col-sm-3" key={item.id}>
-                <ItemCard itemName={item.itemName} image={item.image} description={item.description} />
+        {allItem == null 
+          ? ""
+          : allItem.map(itemRow =>
+            <div className="row justify-content-center"> {itemRow.map(item => 
+              <div className="col-md">
+                <ItemCard itemName={item.title} image={item.image} description={item.description} />
               </div>
-            ))}
-          </div>
-        ) : (
-          <p>No items match your search.</p>
-        )}
+            )}</div>
+          )}
       </div>
-
       <Footer />
     </div>
   );
