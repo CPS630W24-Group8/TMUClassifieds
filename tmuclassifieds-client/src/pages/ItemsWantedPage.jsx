@@ -12,66 +12,50 @@ import AddItemCard from "../components/AddItemCard";
 const ItemsWantedPage = () => {
   const [loggedIn, setLoggedIn] = useState(0);
   const [searchInput, setSearchInput] = useState('');
-  // const [filteredItems, setFilteredItems] = useState(itemsData);
   const [filteredItems, setFilteredItems] = useState();
-  const [allItem, setAllItem] = React.useState(null);
+  const [allItems, setAllItems] = useState([]);
 
   useEffect(() => {
     setLoggedIn(getCookie("email") !== "");
   }, []);
-  useEffect(() => {getItems()},[]);
-  
-  // get all items wanted from the database
-  const getItems = async() => {
-    let result = await axios.get("http://localhost:3001/api/item/get-item-wanted");
-    result = result.data.data
+  useEffect(() => { getItems(); }, []);
 
-    //splitting the list of items into sub arrays of 3s
-    let itemList = [];
-    while (Math.floor(result.length/ 3) >= 1) {
-      const anArray = result.splice(0, 3);
-      itemList.push(anArray);
+  // splitting the list of items into sub arrays of size
+  const splitListInto = (list, size) => {
+    let newList = [];
+    while (Math.floor(list.length / size) >= 1) {
+      const anArray = list.splice(0, size);
+      newList.push(anArray);
     }
-    if (result.length > 0) {
-      itemList.push(result);
+    if (list.length > 0) {
+      newList.push(list);
     }
-    console.log("itemList: ", itemList);
-    setAllItem(itemList);
+    return newList;
   }
 
-  const itemsData = [
-    {
-      id: 1,
-      itemName: 'Scientific calculator',
-      image: 'imageIcon.png',
-      description: 'The calculator must be unbroken and a scientific calculator.'
-    },
-    {
-      id: 2,
-      itemName: 'Computer Security (Art and Science), 2nd Edition',
-      image: 'ComputerSecurity2ndEdition.jpg',
-      description: 'The textbook by Mat Bishop and the print ISBN is 9780321712332. It needs to be brand new.'
-    },
-    {
-      id: 3,
-      itemName: 'Thinking as Computation: A First Course by Hector Levesque',
-      image: 'imageIcon.png',
-      description: 'Textbook can be online, brand new or used. Please contact ASAP.'
-    },
-    {
-      id: 4,
-      itemName: 'Math Textbook - Calculus 101',
-      image: 'imageIcon.png',
-      description: 'Description of the textbook, condition, and other details.'
-    },
-  ];
+  // get all items wanted from the database
+  const getItems = async () => {
+    let result = await axios.get("http://localhost:3001/api/item/get-item-wanted");
+    result = result.data.data;
+    const splitResult = splitListInto(result, 3);
+    setAllItems(splitResult);
+    setFilteredItems(splitResult);
+  }
 
   // Handle search
-  const handleSearchChange = (e) => {
-    const input = e.target.value;
+  const handleSearchChange = (event) => {
+    const input = event.target.value;
     setSearchInput(input);
-    const filtered = itemsData.filter(item => item.itemName.toLowerCase().includes(input.toLowerCase()));
-    setFilteredItems(filtered);
+
+    let filtered = [];
+    allItems.forEach(itemRow => {
+      itemRow.forEach(item => {
+        if (item.title.toLowerCase().includes(input.toLowerCase())) filtered.push(item);
+      })
+    });
+
+    const splitFiltered = splitListInto(filtered, 3);
+    setFilteredItems(splitFiltered);
   };
 
   // Do not render content if user is not logged in
@@ -86,19 +70,21 @@ const ItemsWantedPage = () => {
       </div>
     );
   }
-  
+
   return (
     <div>
       <Navbar />
       <Header title="Items wanted" />
-      <AddItemCard modalTitle="Add a new item" buttonTitle="Add item" type="items wanted" />
 
       <div className="container">
-        {allItem == null 
+        <AddItemCard modalTitle="Add a new item" buttonTitle="Add item" type="items wanted" />
+        <SearchBar searchInput={searchInput} handleSearchChange={handleSearchChange} />
+
+        {filteredItems == null
           ? ""
-          : allItem.map(itemRow =>
-            <div className="row justify-content-center"> {itemRow.map(item => 
-              <div className="col-md">
+          : filteredItems.map(itemRow =>
+            <div className="row justify-content-center"> {itemRow.map(item =>
+              <div className="col-4">
                 <ItemCard itemName={item.title} image={item.image} description={item.description} />
               </div>
             )}</div>

@@ -12,66 +12,50 @@ import AddServiceCard from "../components/AddServiceCard";
 const AcademicServicesPage = () => {
   const [loggedIn, setLoggedIn] = useState(0);
   const [searchInput, setSearchInput] = useState('');
-  // const [filteredItems, setFilteredItems] = useState(itemsData);
-  const [filteredItems, setFilteredItems] = useState();
-  const [allService, setAllService] = useState(null);
+  const [filteredServices, setFilteredServices] = useState();
+  const [allServices, setAllServices] = useState(null);
 
-  useEffect(() => {getServices()},[]);
   useEffect(() => {
     setLoggedIn(getCookie("email") !== "");
   }, []);
+  useEffect(() => { getServices(); }, []);
 
-  // get academic services from the database
-  const getServices = async() => {
-    let result = await axios.get("http://localhost:3001/api/service/get-service");
-    result = result.data.data
-
-    //splitting the list of services into sub arrays of 3s
-    let serviceList = [];
-    while (Math.floor(result.length/ 3) >= 1) {
-      const anArray = result.splice(0, 3);
-      serviceList.push(anArray);
+  // splitting the list of items into sub arrays of size
+  const splitListInto = (list, size) => {
+    let newList = [];
+    while (Math.floor(list.length / size) >= 1) {
+      const anArray = list.splice(0, size);
+      newList.push(anArray);
     }
-    if (result.length > 0) {
-      serviceList.push(result);
+    if (list.length > 0) {
+      newList.push(list);
     }
-    console.log("serviceList: ", serviceList);
-    setAllService(serviceList);
+    return newList;
   }
 
-  const itemsData = [
-    {
-      id: 1,
-      itemName: 'Calculus Tutoring Sessions',
-      image: 'imageIcon.png',
-      description: 'Offering personalized tutoring sessions for calculus I and II. Improve your understanding, solve complex problems, and prepare for exams with a certified math tutor.'
-    },
-    {
-      id: 2,
-      itemName: 'Essay Writing Workshop',
-      image: 'imageIcon.png',
-      description: 'Join our online workshop on academic essay writing. Learn how to structure your essays, develop arguments, and cite sources properly. Ideal for undergraduate students.'
-    },
-    {
-      id: 3,
-      itemName: 'Study Group for Organic Chemistry',
-      image: 'imageIcon.png',
-      description: 'Join our weekly study group sessions for Organic Chemistry. Collaborate with peers, share notes, and tackle challenging topics together. Open to all levels.'
-    },
-    {
-      id: 4,
-      itemName: 'Online Course: Introduction to Programming',
-      image: 'imageIcon.png',
-      description: 'Enroll in our Introduction to Programming online course. Learn the basics of programming languages, coding principles, and software development. No prior experience required.'
-    },
-  ];
+  // get academic services from the database
+  const getServices = async () => {
+    let result = await axios.get("http://localhost:3001/api/service/get-service");
+    result = result.data.data;
+    const splitResult = splitListInto(result, 3);
+    setAllServices(splitResult);
+    setFilteredServices(splitResult);
+  }
 
   // Handle search
-  const handleSearchChange = (e) => {
-    const input = e.target.value;
+  const handleSearchChange = (event) => {
+    const input = event.target.value;
     setSearchInput(input);
-    const filtered = itemsData.filter(item => item.itemName.toLowerCase().includes(input.toLowerCase()));
-    setFilteredItems(filtered);
+
+    let filtered = [];
+    allServices.map(serviceRow => {
+      serviceRow.map(service => {
+        if (service.title.toLowerCase().includes(input.toLowerCase())) filtered.push(service);
+      })
+    });
+
+    const splitFiltered = splitListInto(filtered, 3);
+    setFilteredServices(splitFiltered);
   };
 
   // Do not render content if user is not logged in
@@ -91,20 +75,22 @@ const AcademicServicesPage = () => {
     <div>
       <Navbar />
       <Header title="Academic services" />
-      <AddServiceCard modalTitle="Add a new service" buttonTitle="Add service" />
 
       <div className="container">
-        {allService == null 
+        <AddServiceCard modalTitle="Add a new service" buttonTitle="Add service" />
+        <SearchBar searchInput={searchInput} handleSearchChange={handleSearchChange} />
+
+        {filteredServices == null
           ? ""
-          : allService.map(ServiceRow =>
-            <div className="row justify-content-center"> {ServiceRow.map(service => 
-              <div className="col-md">
+          : filteredServices.map(serviceRow =>
+            <div className="row justify-content-center"> {serviceRow.map(service =>
+              <div className="col-4">
                 <ServiceCard serviceName={service.title} description={service.description} />
               </div>
             )}</div>
           )}
 
-          
+
       </div>
 
       <Footer />

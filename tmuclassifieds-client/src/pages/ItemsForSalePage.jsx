@@ -12,74 +12,50 @@ import AddItemCard from "../components/AddItemCard";
 const ItemCardsForSalePage = () => {
   const [loggedIn, setLoggedIn] = useState(0);
   const [searchInput, setSearchInput] = useState('');
-  // const [filteredItems, setFilteredItems] = useState(itemsData);
   const [filteredItems, setFilteredItems] = useState();
-  const [allItem, setAllItem] = React.useState(null);
+  const [allItems, setAllItems] = React.useState(null);
 
   useEffect(() => {
     setLoggedIn(getCookie("email") !== "");
   }, []);
+  useEffect(() => { getItems(); }, []);
 
-  useEffect(() => {getItems()},[]);
+  // splitting the list of items into sub arrays of size
+  const splitListInto = (list, size) => {
+    let newList = [];
+    while (Math.floor(list.length / size) >= 1) {
+      const anArray = list.splice(0, size);
+      newList.push(anArray);
+    }
+    if (list.length > 0) {
+      newList.push(list);
+    }
+    return newList;
+  }
 
   // get all items for sale from the database
-  const getItems = async() => {
+  const getItems = async () => {
     let result = await axios.get("http://localhost:3001/api/item/get-item-sale");
-    result = result.data.data
-
-    //splitting the list of items into sub arrays of 3s
-    let itemList = [];
-    while (Math.floor(result.length/ 3) >= 1) {
-      const anArray = result.splice(0, 3);
-      itemList.push(anArray);
-    }
-    if (result.length > 0) {
-      itemList.push(result);
-    }
-    console.log("itemList: ", itemList);
-    setAllItem(itemList);
+    result = result.data.data;
+    const splitResult = splitListInto(result, 3);
+    setAllItems(splitResult);
+    setFilteredItems(splitResult);
   }
-  
-  const itemsData = [
-    {
-      id: 1,
-      itemName: 'Ergonomic Office Chair',
-      image: 'imageIcon.png',
-      description: 'Brand new ergonomic office chair, adjustable height, lumbar support, and breathable mesh back. Perfect for long study or work sessions.'
-    },
-    {
-      id: 2,
-      itemName: 'Graphing Calculator TI-84 Plus',
-      image: 'imageIcon.png',
-      description: 'Slightly used TI-84 Plus graphing calculator. Ideal for high school and college math, science, and engineering courses.'
-    },
-    {
-      id: 3,
-      itemName: 'Complete Harry Potter Book Set',
-      image: 'imageIcon.png',
-      description: 'All 7 books in the Harry Potter series by J.K. Rowling. Hardcover, excellent condition. Dive into the magical world again or for the first time.'
-    },
-    {
-      id: 4,
-      itemName: 'MacBook Pro 13-inch',
-      image: 'imageIcon.png',
-      description: '2019 MacBook Pro, 13-inch, 8GB RAM, 256GB SSD. In excellent condition, comes with original charger and box. Perfect for students and professionals alike.'
-    },
-    {
-      id: 5,
-      itemName: 'Yoga Mat',
-      image: 'imageIcon.png',
-      description: 'High-quality, non-slip yoga mat. Durable and eco-friendly material. Comes with a carrying strap. Enhance your yoga practice with comfort and stability.'
-    },
-  ];
-  
-  
+
   // Handle search
   const handleSearchChange = (event) => {
     const input = event.target.value;
     setSearchInput(input);
-    const filtered = itemsData.filter(item => item.itemName.toLowerCase().includes(input.toLowerCase()));
-    setFilteredItems(filtered);
+
+    let filtered = [];
+    allItems.map(itemRow => {
+      itemRow.map(item => {
+        if (item.title.toLowerCase().includes(input.toLowerCase())) filtered.push(item);
+      })
+    });
+
+    const splitFiltered = splitListInto(filtered, 3);
+    setFilteredItems(splitFiltered);
   };
 
   // Do not render content if user is not logged in
@@ -99,14 +75,16 @@ const ItemCardsForSalePage = () => {
     <div>
       <Navbar />
       <Header title="Items for sale" />
-      <AddItemCard modalTitle="Add a new item" buttonTitle="Add item" type="items for sale"/>
 
       <div className="container">
-        {allItem == null 
+        <AddItemCard modalTitle="Add a new item" buttonTitle="Add item" type="items for sale" />
+        <SearchBar searchInput={searchInput} handleSearchChange={handleSearchChange} />
+
+        {filteredItems == null
           ? ""
-          : allItem.map(itemRow =>
-            <div className="row justify-content-center"> {itemRow.map(item => 
-              <div className="col-md">
+          : filteredItems.map(itemRow =>
+            <div className="row justify-content-center"> {itemRow.map(item =>
+              <div className="col-4">
                 <ItemCard itemName={item.title} image={item.image} description={item.description} />
               </div>
             )}</div>
