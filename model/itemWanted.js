@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
 const conn = mongoose.createConnection("mongodb://localhost:27017/tmuclassifieds");
 
-const serviceSchema = new mongoose.Schema({
+const itemWantedSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
   },
+  image: String,
   description: {
     type: String,
     required: true,
@@ -16,5 +17,5 @@ const serviceSchema = new mongoose.Schema({
   },
 });
 
-const service = conn.model("service", serviceSchema, 'services');
-module.exports = service;
+const itemWanted = conn.model("itemWanted", itemWantedSchema);
+module.exports = itemWanted;

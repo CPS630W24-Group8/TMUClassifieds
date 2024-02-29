@@ -4,13 +4,12 @@ const service = require("./model/service");
 
 // create new service and add to database
 router.route("/add-service").post(async (request, response) => {
-  const {title, description} = request.body;
+  const {title, description, user} = request.body;
   console.log(title+ " - "+description);
 
   try {
     await service.create({
-      title: title, 
-      description: description
+      title, description, user
     }).then(service =>
       response.status(200).json({
         message: "Service sucessfully created",

@@ -1,24 +1,25 @@
 const mongoose = require("mongoose");
 const conn = mongoose.createConnection("mongodb://localhost:27017/tmuclassifieds");
 
-const itemSchema = new mongoose.Schema({
+const itemSaleSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
   },
-  image: {
-    type: String,
-    required: true,
-  },
+  image: String,
   description: {
     type: String,
     required: true,
   },
-  type: {
+  user: {
     type: String,
+    required: true,
+  },
+  price: {
+    type: Number,
     required: true,
   },
 });
 
-const item = conn.model("item", itemSchema, 'items');
-module.exports = item;
+const itemSale = conn.model("itemSale", itemSaleSchema);
+module.exports = itemSale;

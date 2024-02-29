@@ -3,11 +3,11 @@ import axios from "axios";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import ItemCard from "../components/ItemCard";
+import ItemWantedCard from "../components/ItemWantedCard";
 import SearchBar from "../components/SearchBar";
 import UnauthDisplay from "../components/UnauthDisplay";
 import { getCookie } from "../cookieManager";
-import AddItemCard from "../components/AddItemCard";
+import AddItemWantedCard from "../components/AddItemWantedCard";
 
 const ItemsWantedPage = () => {
   const [loggedIn, setLoggedIn] = useState(0);
@@ -35,7 +35,7 @@ const ItemsWantedPage = () => {
 
   // get all items wanted from the database
   const getItems = async () => {
-    let result = await axios.get("http://localhost:3001/api/item/get-item-wanted");
+    let result = await axios.get("http://localhost:3001/api/item-wanted/get-item");
     result = result.data.data;
     const splitResult = splitListInto(result, 3);
     setAllItems(splitResult);
@@ -77,7 +77,7 @@ const ItemsWantedPage = () => {
       <Header title="Items wanted" />
 
       <div className="container">
-        <AddItemCard modalTitle="Add a new item" buttonTitle="Add item" type="items wanted" />
+        <AddItemWantedCard modalTitle="Add a new item" buttonTitle="Add item" type="items wanted" user={getCookie("email")}/>
         <SearchBar searchInput={searchInput} handleSearchChange={handleSearchChange} />
 
         {filteredItems == null
@@ -85,7 +85,7 @@ const ItemsWantedPage = () => {
           : filteredItems.map(itemRow =>
             <div className="row justify-content-center"> {itemRow.map(item =>
               <div className="col-4">
-                <ItemCard itemName={item.title} image={item.image} description={item.description} />
+                <ItemWantedCard itemName={item.title} image={item.image} description={item.description} user={item.user} />
               </div>
             )}</div>
           )}

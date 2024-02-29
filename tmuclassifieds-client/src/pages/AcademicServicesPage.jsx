@@ -77,7 +77,7 @@ const AcademicServicesPage = () => {
       <Header title="Academic services" />
 
       <div className="container">
-        <AddServiceCard modalTitle="Add a new service" buttonTitle="Add service" />
+        <AddServiceCard modalTitle="Add a new service" buttonTitle="Add service" user={getCookie("email")} />
         <SearchBar searchInput={searchInput} handleSearchChange={handleSearchChange} />
 
         {filteredServices == null
@@ -85,7 +85,7 @@ const AcademicServicesPage = () => {
           : filteredServices.map(serviceRow =>
             <div className="row justify-content-center"> {serviceRow.map(service =>
               <div className="col-4">
-                <ServiceCard serviceName={service.title} description={service.description} />
+                <ServiceCard serviceName={service.title} description={service.description} user={service.user} />
               </div>
             )}</div>
           )}

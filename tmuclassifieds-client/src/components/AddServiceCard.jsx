@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 
 const AddServiceCard = (props) => {
 	const [newTitle, setNewTitle] = React.useState("");
@@ -19,10 +18,10 @@ const AddServiceCard = (props) => {
 
 		const result = await fetch("http://localhost:3001/api/service/add-service", {
 			method: 'POST',
-			body: JSON.stringify({ title: newTitle, description: newDesc }),
+			body: JSON.stringify({ title: newTitle, description: newDesc, user: props.user }),
 			headers: { "Content-Type": "application/json" }
 		});
-		console.log("result2: " + result.data);
+		console.log("post: " + result.data);
 		window.location.reload();
 	};
 

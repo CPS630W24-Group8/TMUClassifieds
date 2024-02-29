@@ -3,11 +3,11 @@ import axios from "axios";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import ItemCard from "../components/ItemCard";
+import ItemSaleCard from "../components/ItemSaleCard";
 import SearchBar from "../components/SearchBar";
 import UnauthDisplay from "../components/UnauthDisplay";
 import { getCookie } from "../cookieManager";
-import AddItemCard from "../components/AddItemCard";
+import AddItemSaleCard from "../components/AddItemSaleCard";
 
 const ItemCardsForSalePage = () => {
   const [loggedIn, setLoggedIn] = useState(0);
@@ -35,7 +35,7 @@ const ItemCardsForSalePage = () => {
 
   // get all items for sale from the database
   const getItems = async () => {
-    let result = await axios.get("http://localhost:3001/api/item/get-item-sale");
+    let result = await axios.get("http://localhost:3001/api/item-sale/get-item");
     result = result.data.data;
     const splitResult = splitListInto(result, 3);
     setAllItems(splitResult);
@@ -77,7 +77,7 @@ const ItemCardsForSalePage = () => {
       <Header title="Items for sale" />
 
       <div className="container">
-        <AddItemCard modalTitle="Add a new item" buttonTitle="Add item" type="items for sale" />
+        <AddItemSaleCard modalTitle="Add a new item" buttonTitle="Add item" type="items for sale" user={getCookie("email")}/>
         <SearchBar searchInput={searchInput} handleSearchChange={handleSearchChange} />
 
         {filteredItems == null
@@ -85,7 +85,7 @@ const ItemCardsForSalePage = () => {
           : filteredItems.map(itemRow =>
             <div className="row justify-content-center"> {itemRow.map(item =>
               <div className="col-4">
-                <ItemCard itemName={item.title} image={item.image} description={item.description} />
+                <ItemSaleCard itemName={item.title} image={item.image} description={item.description} price={item.price} user={item.user}/>
               </div>
             )}</div>
           )}

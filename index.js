@@ -4,7 +4,8 @@ const http = require("http");
 const cors = require("cors");
 const connectDB = require("./db");
 const router = require("./router");
-const addItemRouter = require("./addItemRouter");
+const itemWantedRouter = require("./itemWantedRouter");
+const itemSaleRouter = require("./itemSaleRouter");
 const addServiceRouter = require("./addServiceRouter");
 
 // port for server to listen to
@@ -16,7 +17,8 @@ const server = http.createServer(app);
 app.use(cors());
 app.use(express.json());
 app.use("/api/auth", router);
-app.use("/api/item", addItemRouter);
+app.use("/api/item-wanted", itemWantedRouter);
+app.use("/api/item-sale", itemSaleRouter);
 app.use("/api/service", addServiceRouter);
 
 // connect to database
