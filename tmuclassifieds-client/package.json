@@ -38,7 +38,7 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:3001",
+  "proxy": "https://tmuclassifieds.onrender.com",
   "devDependencies": {
     "@types/bootstrap": "^5.2.10"
   }

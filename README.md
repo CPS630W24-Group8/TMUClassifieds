@@ -21,7 +21,7 @@ To run server:
 1. Open a terminal and navigate to the root directory `(C:/.../TMUClassifieds)`.
 2. Run `npm start`.
 3. Should see a message `Server started on port 3001`.
-4. To make sure everything works, on your web browser, go to http://localhost:3001/api, should see a JSON message:
+4. To make sure everything works, on your web browser, go to https://tmuclassifieds.onrender.com/api, should see a JSON message:
 ```
 {
     "message": "Message from server: hello!"

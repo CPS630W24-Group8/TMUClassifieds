@@ -32,14 +32,14 @@ const AddItemSaleCard = (props) => {
             const imageData = new FormData();
             imageData.append("image", newImage);
             const response = await axios.post(
-                "http://localhost:3001/api/item-wanted/upload",
+                "https://tmuclassifieds.onrender.com/api/item-wanted/upload",
                 imageData, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             image = response.data.data;
         }
 		console.log("image: ", image);
-		const result = await fetch("http://localhost:3001/api/item-sale/add-item", {
+		const result = await fetch("https://tmuclassifieds.onrender.com/api/item-sale/add-item", {
 			method: 'POST',
 			body: JSON.stringify({ title: newTitle, description: newDesc, image: image, user: props.user, price: newPrice }),
 			headers: { "Content-Type": "application/json" }
