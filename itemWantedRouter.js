@@ -65,7 +65,7 @@ router.route("/get-item").get(async (request, response) => {
 
 // delete an item from database
 router.route("/delete-item").post(async (request, response) => {
-  const entry = request.body.item;
+  const entry = request.body.entry;
   console.log("item:", entry);
   try {
     await itemWanted.findByIdAndDelete( { "_id" : entry._id } ).then(item =>
