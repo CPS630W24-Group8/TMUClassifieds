@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const conn = mongoose.createConnection("mongodb://localhost:27017/tmuclassifieds");
+const db = "mongodb+srv://duong1vu:Nightwing299@tmuclassifieds.b71fwg2.mongodb.net/?retryWrites=true&w=majority&appName=tmuclassifieds";
 
 const serviceSchema = new mongoose.Schema({
   title: {
@@ -16,5 +16,5 @@ const serviceSchema = new mongoose.Schema({
   },
 });
 
-const service = conn.model("service", serviceSchema, 'services');
+const service = db.model("service", serviceSchema, 'services');
 module.exports = service;

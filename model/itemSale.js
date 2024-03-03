@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const conn = mongoose.createConnection("mongodb://localhost:27017/tmuclassifieds");
+const db = "mongodb+srv://duong1vu:Nightwing299@tmuclassifieds.b71fwg2.mongodb.net/?retryWrites=true&w=majority&appName=tmuclassifieds";
 
 const itemSaleSchema = new mongoose.Schema({
   title: {
@@ -21,5 +21,5 @@ const itemSaleSchema = new mongoose.Schema({
   },
 });
 
-const itemSale = conn.model("itemSale", itemSaleSchema, "itemsales");
+const itemSale = db.model("itemSale", itemSaleSchema, "itemsales");
 module.exports = itemSale;
