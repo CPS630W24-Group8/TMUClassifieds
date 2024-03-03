@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const db = "mongodb+srv://duong1vu:Nightwing299@tmuclassifieds.b71fwg2.mongodb.net/?retryWrites=true&w=majority&appName=tmuclassifieds";
+const db = mongoose.createConnection("mongodb+srv://duong1vu:Nightwing299@tmuclassifieds.b71fwg2.mongodb.net/?retryWrites=true&w=majority&appName=tmuclassifieds");
 
 const serviceSchema = new mongoose.Schema({
   title: {
