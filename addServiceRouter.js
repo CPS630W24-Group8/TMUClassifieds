@@ -43,4 +43,24 @@ router.route("/get-service").get(async (request, response) => {
   }
 });
 
+// delete a service from database
+router.route("/delete-service").post(async (request, response) => {
+  const entry = request.body.entry;
+  console.log("service:", entry);
+  try {
+    await service.findByIdAndDelete( { "_id" : entry._id } ).then(service =>
+      response.status(200).json({
+        message: "Service sucessfully created",
+        service,
+      })
+    );
+  } catch (error) {
+    console.log("error: ", error.message);
+    return response.status(401).json({
+      message: "Service not successful deleted",
+      error: error.mesage,
+    });
+  }
+});
+
 module.exports = router;

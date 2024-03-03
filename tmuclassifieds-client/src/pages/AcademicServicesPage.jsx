@@ -8,12 +8,14 @@ import SearchBar from "../components/SearchBar";
 import UnauthDisplay from "../components/UnauthDisplay";
 import { getCookie } from "../cookieManager";
 import AddServiceCard from "../components/AddServiceCard";
+import Spinner from "../components/Spinner";
 
 const AcademicServicesPage = () => {
   const [loggedIn, setLoggedIn] = useState(0);
   const [searchInput, setSearchInput] = useState('');
   const [filteredServices, setFilteredServices] = useState();
   const [allServices, setAllServices] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setLoggedIn(getCookie("email") !== "");
@@ -35,11 +37,13 @@ const AcademicServicesPage = () => {
 
   // get academic services from the database
   const getServices = async () => {
+    setIsLoading(true);
     let result = await axios.get("http://localhost:3001/api/service/get-service");
     result = result.data.data;
     const splitResult = splitListInto(result, 3);
     setAllServices(splitResult);
     setFilteredServices(splitResult);
+    setIsLoading(false);
   }
 
   // Handle search
@@ -80,17 +84,19 @@ const AcademicServicesPage = () => {
         <AddServiceCard modalTitle="Add a new service" buttonTitle="Add service" user={getCookie("email")} />
         <SearchBar searchInput={searchInput} handleSearchChange={handleSearchChange} />
 
-        {filteredServices == null
-          ? ""
-          : filteredServices.map(serviceRow =>
-            <div className="row justify-content-center"> {serviceRow.map(service =>
-              <div className="col-4">
-                <ServiceCard serviceName={service.title} description={service.description} user={service.user} />
-              </div>
-            )}</div>
-          )}
-
-
+        {isLoading 
+          ? <Spinner />
+          : <>
+            {filteredServices == null
+              ? ""
+              : filteredServices.map(serviceRow =>
+                <div className="row justify-content-center"> {serviceRow.map(service =>
+                  <div className="col-4">
+                    <ServiceCard serviceName={service.title} description={service.description} user={service.user} service={service} />
+                  </div>
+                )}</div>
+              )}
+            </>}
       </div>
 
       <Footer />

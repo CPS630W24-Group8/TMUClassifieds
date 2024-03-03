@@ -17,5 +17,5 @@ const itemWantedSchema = new mongoose.Schema({
   },
 });
 
-const itemWanted = conn.model("itemWanted", itemWantedSchema);
+const itemWanted = conn.model("itemWanted", itemWantedSchema, "itemwanteds");
 module.exports = itemWanted;

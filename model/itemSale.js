@@ -21,5 +21,5 @@ const itemSaleSchema = new mongoose.Schema({
   },
 });
 
-const itemSale = conn.model("itemSale", itemSaleSchema);
+const itemSale = conn.model("itemSale", itemSaleSchema, "itemsales");
 module.exports = itemSale;

@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const itemWanted = require("./model/itemWanted");
+const fs = require('fs');
 const multer = require('multer');
 
 // determine the destination and filename of the uploaded file
@@ -58,6 +59,36 @@ router.route("/get-item").get(async (request, response) => {
     return response.status(401).json({
       message: "Items not successful found",
       error: error.mesage,
+    });
+  }
+});
+
+// delete an item from database
+router.route("/delete-item").post(async (request, response) => {
+  const entry = request.body.item;
+  console.log("item:", entry);
+  try {
+    await itemWanted.findByIdAndDelete( { "_id" : entry._id } ).then(item =>
+      response.status(200).json({
+        message: "Item sucessfully created",
+        item,
+      })
+    );
+  } catch (error) {
+    console.log("error: ", error.message);
+    return response.status(401).json({
+      message: "Item not successful deleted",
+      error: error.mesage,
+    });
+  }
+  // delete image file
+  if (entry.image != "imageIcon.png") {
+    fs.unlink("./tmuclassifieds-client/src/images/"+entry.image, (error) => {
+      if (error) {
+        console.log("error:", error.message);
+      } else { 
+        console.log("File "+entry.image+" is deleted");
+      }
     });
   }
 });

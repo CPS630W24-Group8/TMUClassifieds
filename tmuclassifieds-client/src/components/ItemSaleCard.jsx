@@ -1,4 +1,6 @@
 import React from "react";
+import DeleteEntry from "../components/DeleteEntry";
+import { getCookie } from "../cookieManager";
 
 const ItemSaleCard = (props) => {
 	return (
@@ -10,6 +12,12 @@ const ItemSaleCard = (props) => {
                 <p className="card-text">${props.price}</p>
 				<p className="card-text">{props.description}</p>
 				<button type="button" className="btn btn-primary">Contact</button>
+				{getCookie("email") === props.user
+				? <>
+					<button type="button" className="btn btn-success" style={{marginLeft: '10px'}}>Edit</button>
+					<DeleteEntry type="item sale" entry= {props.item} />
+				</>
+				: ""}
 			</div>
 		</div>
 	)

@@ -1,4 +1,6 @@
 import React from "react";
+import DeleteEntry from "../components/DeleteEntry";
+import { getCookie } from "../cookieManager";
 
 const ServiceCard = (props) => {
 	return (
@@ -8,6 +10,12 @@ const ServiceCard = (props) => {
 				<p className="card-text">{props.user}</p>
 				<p className="card-text">{props.description}</p>
 				<button type="button" className="btn btn-primary">Contact</button>
+				{getCookie("email") === props.user
+				? <>
+					<button type="button" className="btn btn-success" style={{marginLeft: '10px'}}>Edit</button>
+					<DeleteEntry type="service" entry= {props.service} />
+				</>
+				: ""}
 			</div>
 		</div>
 	)
