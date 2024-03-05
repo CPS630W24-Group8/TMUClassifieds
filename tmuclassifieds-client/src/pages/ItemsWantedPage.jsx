@@ -38,7 +38,7 @@ const ItemsWantedPage = () => {
   // get all items wanted from the database
   const getItems = async () => {
     setIsLoading(true);
-    let result = await axios.get("https://tmuclassifieds.onrender.com/api/item-wanted/get-item");
+    let result = await axios.get("http://localhost:3001/api/item-wanted/get-item");
     result = result.data.data;
     const splitResult = splitListInto(result, 3);
     setAllItems(splitResult);
@@ -81,12 +81,12 @@ const ItemsWantedPage = () => {
       <Header title="Items wanted" />
 
       <div className="container">
-        <AddItemWantedCard modalTitle="Add a new item" buttonTitle="Add item" type="items wanted" user={getCookie("email")}/>
+        <AddItemWantedCard modalTitle="Add a new item" buttonTitle="Add item" type="items wanted" user={getCookie("email")} />
         <SearchBar searchInput={searchInput} handleSearchChange={handleSearchChange} />
 
-        {isLoading 
+        {isLoading
           ? <Spinner />
-          :<>
+          : <>
             {filteredItems == null
               ? ""
               : filteredItems.map(itemRow =>
@@ -95,7 +95,7 @@ const ItemsWantedPage = () => {
                     <ItemWantedCard item={item} />
                   </div>
                 )}</div>
-            )}
+              )}
           </>}
       </div>
       <Footer />

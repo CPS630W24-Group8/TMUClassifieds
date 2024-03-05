@@ -27,7 +27,7 @@ const LogInCard = ({ onLoggedIn }) => {
     if (!validateForm()) return;
 
     // Proceed with login
-    const response = await fetch("https://tmuclassifieds.onrender.com/api/auth/login", {
+    const response = await fetch("http://localhost:3001/api/auth/login", {
       method: "POST",
       body: JSON.stringify({ email: email, password: password }),
       headers: { "Content-Type": "application/json" }

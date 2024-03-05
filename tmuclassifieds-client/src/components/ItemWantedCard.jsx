@@ -15,7 +15,7 @@ const ItemWantedCard = (props) => {
 
 	const imageFile = React.useRef(null);
 
-    const clearForm = () => {
+	const clearForm = () => {
 		if (imageFile.current) {
 			imageFile.current.value = "";
 		}
@@ -41,7 +41,7 @@ const ItemWantedCard = (props) => {
 				headers: { "Content-Type": "multipart/form-data" },
 			});
 			file = response.data.data;
-		} 
+		}
 		console.log("image: ", file);
 		await fetch("http://localhost:3001/api/item-wanted/edit-item", {
 			method: 'POST',
@@ -61,11 +61,11 @@ const ItemWantedCard = (props) => {
 					<p className="card-text">{props.item.user}</p>
 					<p className="card-text">{props.item.description}</p>
 					{getCookie("email") === props.item.user
-					? <>
-						<button type="button" className="btn btn-success" onClick={editClick}>Edit</button>
-						<DeleteEntry type="item wanted" entry= {props.item} />
-					</>
-					: <button type="button" className="btn btn-primary">Contact</button>}
+						? <>
+							<button type="button" className="btn btn-success" onClick={editClick}>Edit</button>
+							<DeleteEntry type="item wanted" entry={props.item} />
+						</>
+						: <button type="button" className="btn btn-primary">Contact</button>}
 				</div>
 			</div>
 		);
@@ -74,7 +74,7 @@ const ItemWantedCard = (props) => {
 	const renderEdit = () => {
 		return (
 			<div className="card" style={{ backgroundColor: '#08314A' }}>
-				<form onSubmit={formSubmit} style={{margin: "10px"}}>
+				<form onSubmit={formSubmit} style={{ margin: "10px" }}>
 					<div className="mb-3">
 						<label htmlFor="item-title" className="form-label">Title</label>
 						<input type="text" className="form-control" id="item-title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} required />
@@ -88,7 +88,7 @@ const ItemWantedCard = (props) => {
 						<textarea className="form-control" id="item-description" value={newDesc} onChange={(e) => setNewDesc(e.target.value)} required />
 					</div>
 					<button type="button" className="btn btn-danger" id="cancel-button" onClick={clearForm}>Cancel</button>
-					<button type="submit" className="btn btn-primary" style={{marginLeft: '10px'}}>Submit</button>
+					<button type="submit" className="btn btn-primary" style={{ marginLeft: '10px' }}>Submit</button>
 				</form>
 			</div>
 		);

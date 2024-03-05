@@ -38,7 +38,7 @@ const AcademicServicesPage = () => {
   // get academic services from the database
   const getServices = async () => {
     setIsLoading(true);
-    let result = await axios.get("https://tmuclassifieds.onrender.com/api/service/get-service");
+    let result = await axios.get("http://localhost:3001/api/service/get-service");
     result = result.data.data;
     const splitResult = splitListInto(result, 3);
     setAllServices(splitResult);
@@ -84,7 +84,7 @@ const AcademicServicesPage = () => {
         <AddServiceCard modalTitle="Add a new service" buttonTitle="Add service" user={getCookie("email")} />
         <SearchBar searchInput={searchInput} handleSearchChange={handleSearchChange} />
 
-        {isLoading 
+        {isLoading
           ? <Spinner />
           : <>
             {filteredServices == null
@@ -96,7 +96,7 @@ const AcademicServicesPage = () => {
                   </div>
                 )}</div>
               )}
-            </>}
+          </>}
       </div>
 
       <Footer />

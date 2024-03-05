@@ -16,7 +16,7 @@ const ItemSaleCard = (props) => {
 
 	const imageFile = React.useRef(null);
 
-    const clearForm = () => {
+	const clearForm = () => {
 		if (imageFile.current) {
 			imageFile.current.value = "";
 		}
@@ -43,7 +43,7 @@ const ItemSaleCard = (props) => {
 				headers: { "Content-Type": "multipart/form-data" },
 			});
 			file = response.data.data;
-		} 
+		}
 		console.log("image: ", file);
 		await fetch("http://localhost:3001/api/item-sale/edit-item", {
 			method: 'POST',
@@ -55,7 +55,7 @@ const ItemSaleCard = (props) => {
 	}
 
 	const renderNormal = () => {
-		return ( 
+		return (
 			<div className="card" style={{ backgroundColor: '#08314A' }}>
 				<img src={require(`../images/${props.item.image}`)} alt="" className="card-img-top img-thumbnail img-fluid" />
 				<div className="card-body">
@@ -64,11 +64,11 @@ const ItemSaleCard = (props) => {
 					<p className="card-text">${props.item.price}</p>
 					<p className="card-text">{props.item.description}</p>
 					{getCookie("email") === props.item.user
-					? <>
-						<button type="button" className="btn btn-success" onClick={editClick}>Edit</button>
-						<DeleteEntry type="item sale" entry= {props.item} />
-					</>
-					: <button type="button" className="btn btn-primary">Contact</button>}
+						? <>
+							<button type="button" className="btn btn-success" onClick={editClick}>Edit</button>
+							<DeleteEntry type="item sale" entry={props.item} />
+						</>
+						: <button type="button" className="btn btn-primary">Contact</button>}
 				</div>
 			</div>
 		);
@@ -77,7 +77,7 @@ const ItemSaleCard = (props) => {
 	const renderEdit = () => {
 		return (
 			<div className="card" style={{ backgroundColor: '#08314A' }}>
-				<form onSubmit={formSubmit} style={{margin: "10px"}}>
+				<form onSubmit={formSubmit} style={{ margin: "10px" }}>
 					<div className="mb-3">
 						<label htmlFor="item-title" className="form-label">Title</label>
 						<input type="text" className="form-control" id="item-title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} required />
@@ -95,7 +95,7 @@ const ItemSaleCard = (props) => {
 						<textarea className="form-control" id="item-description" value={newDesc} onChange={(e) => setNewDesc(e.target.value)} required />
 					</div>
 					<button type="button" className="btn btn-danger" id="cancel-button" onClick={clearForm}>Cancel</button>
-					<button type="submit" className="btn btn-primary" style={{marginLeft: '10px'}}>Submit</button>
+					<button type="submit" className="btn btn-primary" style={{ marginLeft: '10px' }}>Submit</button>
 				</form>
 			</div>
 		);

@@ -11,7 +11,7 @@ const ServiceCard = (props) => {
 		setEditing(true);
 	}
 
-    const clearForm = () => {
+	const clearForm = () => {
 		setNewTitle(props.service.title);
 		setNewDesc(props.service.description);
 		setEditing(false);
@@ -39,11 +39,11 @@ const ServiceCard = (props) => {
 					<p className="card-text">{props.service.user}</p>
 					<p className="card-text">{props.service.description}</p>
 					{getCookie("email") === props.service.user
-					? <>
-						<button type="button" className="btn btn-success" onClick={editClick}>Edit</button>
-						<DeleteEntry type="service" entry= {props.service} />
-					</>
-					: <button type="button" className="btn btn-primary">Contact</button>}
+						? <>
+							<button type="button" className="btn btn-success" onClick={editClick}>Edit</button>
+							<DeleteEntry type="service" entry={props.service} />
+						</>
+						: <button type="button" className="btn btn-primary">Contact</button>}
 				</div>
 			</div>
 		);
@@ -52,7 +52,7 @@ const ServiceCard = (props) => {
 	const renderEdit = () => {
 		return (
 			<div className="card" style={{ backgroundColor: '#08314A' }}>
-				<form onSubmit={formSubmit} style={{margin: "10px"}}>
+				<form onSubmit={formSubmit} style={{ margin: "10px" }}>
 					<div className="mb-3">
 						<label htmlFor="service-title" className="form-label">Title</label>
 						<input type="text" className="form-control" id="service-title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} required />
@@ -62,7 +62,7 @@ const ServiceCard = (props) => {
 						<textarea className="form-control" id="service-description" value={newDesc} onChange={(e) => setNewDesc(e.target.value)} required />
 					</div>
 					<button type="button" className="btn btn-danger" id="cancel-button" onClick={clearForm}>Cancel</button>
-					<button type="submit" className="btn btn-primary" style={{marginLeft: '10px'}}>Submit</button>
+					<button type="submit" className="btn btn-primary" style={{ marginLeft: '10px' }}>Submit</button>
 				</form>
 			</div>
 		);

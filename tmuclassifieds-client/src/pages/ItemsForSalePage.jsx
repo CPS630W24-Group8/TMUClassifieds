@@ -38,7 +38,7 @@ const ItemCardsForSalePage = () => {
   // get all items for sale from the database
   const getItems = async () => {
     setIsLoading(true);
-    let result = await axios.get("https://tmuclassifieds.onrender.com/api/item-sale/get-item");
+    let result = await axios.get("http://localhost:3001/api/item-sale/get-item");
     result = result.data.data;
     const splitResult = splitListInto(result, 3);
     setAllItems(splitResult);
@@ -81,10 +81,10 @@ const ItemCardsForSalePage = () => {
       <Header title="Items for sale" />
 
       <div className="container">
-        <AddItemSaleCard modalTitle="Add a new item" buttonTitle="Add item" type="items for sale" user={getCookie("email")}/>
+        <AddItemSaleCard modalTitle="Add a new item" buttonTitle="Add item" type="items for sale" user={getCookie("email")} />
         <SearchBar searchInput={searchInput} handleSearchChange={handleSearchChange} />
 
-        {isLoading 
+        {isLoading
           ? <Spinner />
           : <>
             {filteredItems == null
@@ -96,7 +96,7 @@ const ItemCardsForSalePage = () => {
                   </div>
                 )}</div>
               )}
-            </>}
+          </>}
       </div>
       <Footer />
     </div>

@@ -36,9 +36,9 @@ const AddItemWantedCard = (props) => {
 				headers: { "Content-Type": "multipart/form-data" },
 			});
 			image = response.data.data;
-		} 
+		}
 		console.log("image: ", image);
-		const result = await fetch("https://tmuclassifieds.onrender.com/api/item-wanted/add-item", {
+		const result = await fetch("http://localhost:3001/api/item-wanted/add-item", {
 			method: 'POST',
 			body: JSON.stringify({ title: newTitle, description: newDesc, image: image, user: props.user }),
 			headers: { "Content-Type": "application/json" }
