@@ -6,7 +6,7 @@ const connectDB = require("./db");
 const authenticationRouter = require("./authenticationRouter");
 const itemWantedRouter = require("./itemWantedRouter");
 const itemSaleRouter = require("./itemSaleRouter");
-const addServiceRouter = require("./addServiceRouter");
+const serviceRouter = require("./serviceRouter");
 
 // port for server to listen to
 const PORT = process.env.PORT || 3001;
@@ -19,7 +19,7 @@ app.use(express.json());
 app.use("/api/auth", authenticationRouter);
 app.use("/api/item-wanted", itemWantedRouter);
 app.use("/api/item-sale", itemSaleRouter);
-app.use("/api/service", addServiceRouter);
+app.use("/api/service", serviceRouter);
 
 // connect to database
 connectDB();

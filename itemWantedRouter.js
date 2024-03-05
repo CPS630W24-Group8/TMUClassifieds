@@ -17,7 +17,6 @@ const upload = multer({storage: storage});
 
 // upload image when creating new item
 router.route("/upload").post(upload.single("image"), async (request, response) => {
-  //imageName = request.file.filename;
   response.json({ message: "Image is uploaded successfully.", data: request.file.filename });
 });
 
@@ -78,7 +77,7 @@ router.route("/delete-item").post(async (request, response) => {
     console.log("error: ", error.message);
     return response.status(401).json({
       message: "Item not successful deleted",
-      error: error.mesage,
+      error: error.message,
     });
   }
   // delete image file
@@ -91,6 +90,37 @@ router.route("/delete-item").post(async (request, response) => {
       }
     });
   }
+});
+
+// edit item
+router.route("/edit-item").post(async (request, response) => {
+  const update = { title: request.body.title, image: request.body.image, description: request.body.description };
+  console.log(update);
+  try {
+    await itemWanted.findByIdAndUpdate(request.body.id, update).then(item =>
+        response.status(200).json({
+          message: "Item sucessfully edited",
+          item,
+        })
+      );
+    } catch (error) {
+      console.log("error: ", error.message);
+      return response.status(401).json({
+        message: "Item not successful edited",
+        error: error.mesage,
+      });
+    }
+
+    // delete image file
+    if (request.body.image != request.body.oldImage) {
+      fs.unlink("./tmuclassifieds-client/src/images/"+request.body.oldImage, (error) => {
+        if (error) {
+          console.log("error:", error.message);
+        } else { 
+          console.log("File "+request.body.oldImage+" is deleted");
+        }
+      });
+    }
 });
 
 module.exports = router;

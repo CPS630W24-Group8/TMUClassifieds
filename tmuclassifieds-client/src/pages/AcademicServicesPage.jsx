@@ -91,8 +91,8 @@ const AcademicServicesPage = () => {
               ? ""
               : filteredServices.map(serviceRow =>
                 <div className="row justify-content-center"> {serviceRow.map(service =>
-                  <div className="col-4">
-                    <ServiceCard serviceName={service.title} description={service.description} user={service.user} service={service} />
+                  <div className="col-md-4">
+                    <ServiceCard service={service} />
                   </div>
                 )}</div>
               )}

@@ -63,4 +63,24 @@ router.route("/delete-service").post(async (request, response) => {
   }
 });
 
+// edit service
+router.route("/edit-service").post(async (request, response) => {
+  const update = { title: request.body.title, description: request.body.description };
+  console.log(update);
+  try {
+    await service.findByIdAndUpdate(request.body.id, update).then(service =>
+        response.status(200).json({
+          message: "Service sucessfully edited",
+          service,
+        })
+      );
+    } catch (error) {
+      console.log("error: ", error.message);
+      return response.status(401).json({
+        message: "Service not successful edited",
+        error: error.mesage,
+      });
+    }
+});
+
 module.exports = router;

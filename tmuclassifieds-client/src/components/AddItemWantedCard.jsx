@@ -31,7 +31,7 @@ const AddItemWantedCard = (props) => {
 			const imageData = new FormData();
 			imageData.append("image", newImage);
 			const response = await axios.post(
-				"https://tmuclassifieds.onrender.com/api/item-wanted/upload",
+				"http://localhost:3001/api/item-wanted/upload",
 				imageData, {
 				headers: { "Content-Type": "multipart/form-data" },
 			});

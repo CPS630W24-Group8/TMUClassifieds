@@ -91,8 +91,8 @@ const ItemsWantedPage = () => {
               ? ""
               : filteredItems.map(itemRow =>
                 <div className="row justify-content-center"> {itemRow.map(item =>
-                  <div className="col-4">
-                    <ItemWantedCard itemName={item.title} image={item.image} description={item.description} user={item.user} item={item} />
+                  <div className="col-md-4">
+                    <ItemWantedCard item={item} />
                   </div>
                 )}</div>
             )}
