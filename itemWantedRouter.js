@@ -96,6 +96,18 @@ router.route("/delete-item").post(async (request, response) => {
 router.route("/edit-item").post(async (request, response) => {
   const update = { title: request.body.title, image: request.body.image, description: request.body.description };
   console.log(update);
+
+  // delete image file
+  if (request.body.image != request.body.oldImage && request.body.oldImage != "imageIcon.png") {
+    fs.unlink("./tmuclassifieds-client/src/images/"+request.body.oldImage, (error) => {
+      if (error) {
+        console.log("error:", error.message);
+      } else { 
+        console.log("File "+request.body.oldImage+" is deleted");
+      }
+    });
+  }
+  
   try {
     await itemWanted.findByIdAndUpdate(request.body.id, update).then(item =>
         response.status(200).json({
@@ -108,17 +120,6 @@ router.route("/edit-item").post(async (request, response) => {
       return response.status(401).json({
         message: "Item not successful edited",
         error: error.mesage,
-      });
-    }
-
-    // delete image file
-    if (request.body.image != request.body.oldImage) {
-      fs.unlink("./tmuclassifieds-client/src/images/"+request.body.oldImage, (error) => {
-        if (error) {
-          console.log("error:", error.message);
-        } else { 
-          console.log("File "+request.body.oldImage+" is deleted");
-        }
       });
     }
 });

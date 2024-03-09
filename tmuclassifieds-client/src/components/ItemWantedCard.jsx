@@ -5,9 +5,10 @@ import { getCookie } from "../cookieManager";
 
 const ItemWantedCard = (props) => {
 	const [editing, setEditing] = useState(false);
-	const [newTitle, setNewTitle] = React.useState(props.item.title);
-	const [newImage, setNewImage] = React.useState();
-	const [newDesc, setNewDesc] = React.useState(props.item.description);
+	const [newTitle, setNewTitle] = useState(props.item.title);
+	const [newImage, setNewImage] = useState();
+	const [newDesc, setNewDesc] = useState(props.item.description);
+	const [noImage, setNoImage] = useState(false);
 
 	const editClick = () => {
 		setEditing(true);
@@ -23,6 +24,7 @@ const ItemWantedCard = (props) => {
 		setNewDesc(props.item.description);
 		setNewImage();
 		setEditing(false);
+		setNoImage(false);
 	};
 
 	const formSubmit = async (event) => {
@@ -31,18 +33,21 @@ const ItemWantedCard = (props) => {
 		clearForm();
 
 		let file = props.item.image;
-		if (newImage != null) {
-			console.log(newImage);
-			const imageData = new FormData();
-			imageData.append("image", newImage);
-			const response = await axios.post(
-				"http://localhost:3001/api/item-wanted/upload",
-				imageData, {
-				headers: { "Content-Type": "multipart/form-data" },
-			});
-			file = response.data.data;
+		if (noImage) {
+			file = "imageIcon.png";
+		} else {
+			if (newImage != null) {
+				console.log(newImage);
+				const imageData = new FormData();
+				imageData.append("image", newImage);
+				const response = await axios.post(
+					"http://localhost:3001/api/item-wanted/upload",
+					imageData, {
+					headers: { "Content-Type": "multipart/form-data" },
+				});
+				file = response.data.data;
+			}
 		}
-		console.log("image: ", file);
 		await fetch("http://localhost:3001/api/item-wanted/edit-item", {
 			method: 'POST',
 			body: JSON.stringify({ id: props.item._id, title: newTitle, description: newDesc, image: file, oldImage: props.item.image }),
@@ -82,6 +87,10 @@ const ItemWantedCard = (props) => {
 					<div className="mb-3">
 						<label htmlFor="item-image" className="form-label">Image file (optional)</label>
 						<input type="file" className="form-control" id="item-image" name="image" ref={imageFile} accept="image/*" onChange={(e) => setNewImage(e.target.files[0])} />
+					</div>
+					<div className="mb-3">
+						<input className="form-check-input" type="checkbox" id="wantNoImage" onChange={(e) => setNoImage(e.target.checked)} />
+						<label className="form-check-label" htmlFor="wantNoImage" style={{marginLeft: "10px"}}> Select no image file</label>
 					</div>
 					<div className="mb-3">
 						<label htmlFor="item-description" className="form-label">Description</label>
