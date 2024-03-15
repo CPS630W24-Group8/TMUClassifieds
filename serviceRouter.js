@@ -43,6 +43,25 @@ router.route("/get-service").get(async (request, response) => {
   }
 });
 
+// get all services created by user
+router.route("/get-user-service").get(async (request, response) => {
+  const user = request.query.user;
+  try{
+    service.find({ user: user }).then (data => 
+      response.status(200).json({
+        message: "User's services sucessfully found",
+        data: data,
+      })
+    );
+  } catch (error) {
+    console.log("error: ", error.message);
+    return response.status(401).json({
+      message: "User's services not successful found",
+      error: error.mesage,
+    });
+  }
+});
+
 // delete a service from database
 router.route("/delete-service").post(async (request, response) => {
   const entry = request.body.entry;
@@ -82,5 +101,7 @@ router.route("/edit-service").post(async (request, response) => {
       });
     }
 });
+
+
 
 module.exports = router;

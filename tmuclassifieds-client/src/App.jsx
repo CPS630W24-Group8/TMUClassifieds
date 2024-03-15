@@ -7,6 +7,7 @@ import DefaultPage from "./pages/DefaultPage";
 import ItemsWantedPage from "./pages/ItemsWantedPage";
 import ItemsForSalePage from "./pages/ItemsForSalePage";
 import AcademicServicesPage from "./pages/AcademicServicesPage";
+import ProfilePage from "./pages/ProfilePage";
 
 const App = () => {
   // React routing reference: https://www.w3schools.com/react/react_router.asp
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/items-wanted" Component={ItemsWantedPage} />
         <Route path="/items-for-sale" Component={ItemsForSalePage} />
         <Route path="/academic-services" Component={AcademicServicesPage} />
+        <Route path="/profile" Component={ProfilePage} />
       </Routes>
     </BrowserRouter>
   );

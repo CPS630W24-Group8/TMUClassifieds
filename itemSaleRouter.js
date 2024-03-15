@@ -45,6 +45,25 @@ router.route("/get-item").get(async (request, response) => {
   }
 });
 
+// get all item for sale created by user
+router.route("/get-user-item").get(async (request, response) => {
+  const user = request.query.user;
+  try{
+    itemSale.find({ user: user }).then (data => 
+      response.status(200).json({
+        message: "User's items sucessfully found",
+        data: data,
+      })
+    );
+  } catch (error) {
+    console.log("error: ", error.message);
+    return response.status(401).json({
+      message: "User's items not successful found",
+      error: error.mesage,
+    });
+  }
+});
+
 // delete an item from database
 router.route("/delete-item").post(async (request, response) => {
   const entry = request.body.entry;
