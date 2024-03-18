@@ -1,12 +1,22 @@
 const user = require("./model/user");
+const cryptojs = require("crypto-js");
+
+const encrypt = (text) => {
+  return cryptojs.enc.Base64.stringify(cryptojs.enc.Utf8.parse(text));
+}
+
+const decrypt = (ciphertext) => {
+  return cryptojs.enc.Base64.parse(ciphertext).toString(cryptojs.enc.Utf8);
+}
 
 // Create a new user in the database
 exports.register = async (request, response, next) => {
   const { email, password } = request.body;
+  const encryptedPassword = encrypt(password);
   try {
     await user.create({
-      email,
-      password
+      email: email,
+      password: encryptedPassword
     }).then(user =>
       response.status(200).json({
         message: "User successfully created",
@@ -14,6 +24,7 @@ exports.register = async (request, response, next) => {
       })
     );
   } catch (error) {
+    console.log(error);
     return response.status(401).json({
       message: "User not successful created",
       error: error.mesage,
@@ -30,8 +41,9 @@ exports.login = async (request, response, next) => {
       message: "Email or Password not present",
     })
   }
+  const encryptedPassword = encrypt(password);
   try {
-    const loginUser = await user.findOne({ email, password });
+    const loginUser = await user.findOne({ email: email, password: encryptedPassword });
     if (!loginUser) {
       return response.status(401).json({
         message: "Login not successful",
@@ -56,8 +68,8 @@ exports.changeEmail = async (request, response, next) => {
   const { oldEmail, newEmail } = request.body;
   try {
     await user.findOneAndUpdate(
-      {email: oldEmail},
-      {email: newEmail}
+      { email: oldEmail },
+      { email: newEmail }
     ).then(user =>
       response.status(200).json({
         message: "Email address successfully changed",
@@ -75,10 +87,12 @@ exports.changeEmail = async (request, response, next) => {
 // Change user's password in the database
 exports.changePassword = async (request, response, next) => {
   const { email, oldPassword, newPassword } = request.body;
+  const oldEncryptedPassword = encrypt(oldPassword);
+  const newEncryptedPassword = encrypt(newPassword);
   try {
     await user.findOneAndUpdate(
-      {email: email, password: oldPassword},
-      {password: newPassword}
+      { email: email, password: oldEncryptedPassword },
+      { password: newEncryptedPassword }
     ).then(user =>
       response.status(200).json({
         message: "Password successfully changed",
