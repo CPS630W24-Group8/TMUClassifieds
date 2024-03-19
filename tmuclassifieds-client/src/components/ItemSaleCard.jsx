@@ -10,6 +10,7 @@ const ItemSaleCard = (props) => {
 	const [newPrice, setNewPrice] = useState(props.item.price);
 	const [newDesc, setNewDesc] = useState(props.item.description);
 	const [noImage, setNoImage] = useState(false);
+	const [newTag, setNewTag] = React.useState(props.item.tag);
 
 	const editClick = () => {
 		setEditing(true);
@@ -25,6 +26,7 @@ const ItemSaleCard = (props) => {
 		setNewDesc(props.item.description);
 		setNewImage();
 		setNewPrice(props.item.price);
+		setNewTag(props.item.tag);
 		setEditing(false);
 		setNoImage(false);
 	};
@@ -53,7 +55,7 @@ const ItemSaleCard = (props) => {
 		console.log("image: ", file);
 		await fetch("http://localhost:3001/api/item-sale/edit-item", {
 			method: 'POST',
-			body: JSON.stringify({ id: props.item._id, title: newTitle, price: newPrice, description: newDesc, image: file, oldImage: props.item.image }),
+			body: JSON.stringify({ id: props.item._id, title: newTitle, price: newPrice, description: newDesc, image: file, oldImage: props.item.image, tag: newTag }),
 			headers: { "Content-Type": "application/json" }
 		});
 
@@ -69,6 +71,7 @@ const ItemSaleCard = (props) => {
 					<p className="card-text">{props.item.user}</p>
 					<p className="card-text">${props.item.price}</p>
 					<p className="card-text">{props.item.description}</p>
+					<p className="card-text">{props.item.tag}</p>
 					{getCookie("email") === props.item.user
 						? <>
 							<button type="button" className="btn btn-success" onClick={editClick}>Edit</button>
@@ -103,6 +106,14 @@ const ItemSaleCard = (props) => {
 					<div className="mb-3">
 						<label htmlFor="item-description" className="form-label">Description</label>
 						<textarea className="form-control" id="item-description" value={newDesc} onChange={(e) => setNewDesc(e.target.value)} required />
+					</div>
+					<div className="mb-3">
+						<label htmlFor="item-tag" className="form-label">Tag</label>
+						<select className="form-control" id="item-tag" value={newTag} onChange={(e) => setNewTag(e.target.value)} required>
+        					<option value="textbooks">Textbooks</option>
+							<option value="tools">Tools</option>
+							<option value="other">Other</option>
+						</select>
 					</div>
 					<button type="button" className="btn btn-danger" id="cancel-button" onClick={clearForm}>Cancel</button>
 					<button type="submit" className="btn btn-primary" style={{ marginLeft: '10px' }}>Submit</button>

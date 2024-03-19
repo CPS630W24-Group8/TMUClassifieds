@@ -19,6 +19,10 @@ const itemSaleSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  tag: {
+    type: String,
+    required: true
+  },
 });
 
 const itemSale = db.model("itemSale", itemSaleSchema, "itemsales");

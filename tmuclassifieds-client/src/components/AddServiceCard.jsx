@@ -3,10 +3,12 @@ import React from "react";
 const AddServiceCard = (props) => {
 	const [newTitle, setNewTitle] = React.useState("");
 	const [newDesc, setNewDesc] = React.useState("");
+	const [newTag, setNewTag] = React.useState("");
 
 	const clearModal = () => {
 		setNewTitle("");
 		setNewDesc("");
+		setNewTag("");
 	};
 
 	const onSubmit = async (event) => {
@@ -18,7 +20,7 @@ const AddServiceCard = (props) => {
 
 		const result = await fetch("http://localhost:3001/api/service/add-service", {
 			method: 'POST',
-			body: JSON.stringify({ title: newTitle, description: newDesc, user: props.user }),
+			body: JSON.stringify({ title: newTitle, description: newDesc, user: props.user, tag: newTag }),
 			headers: { "Content-Type": "application/json" }
 		});
 		console.log("post: " + result.data);
@@ -46,6 +48,14 @@ const AddServiceCard = (props) => {
 								<div className="mb-3">
 									<label htmlFor="service-description" className="col-form-label">Description</label>
 									<textarea className="form-control" id="service-description" value={newDesc} onChange={(e) => setNewDesc(e.target.value)} required />
+								</div>
+								<div className="mb-3">
+									<label htmlFor="item-tag" className="form-label">Tag</label>
+									<select name="item-tag" id="item-tag" onChange={(e) => setNewTag(e.target.value)}>
+										<option value="math">Math</option>
+										<option value="writing">Writing</option>
+										<option value="other">Other</option>
+									</select>
 								</div>
 								<div className="modal-footer">
 									<button type="button" className="btn btn-danger" id="cancel-button" data-bs-dismiss="modal" onClick={clearModal}>Cancel</button>

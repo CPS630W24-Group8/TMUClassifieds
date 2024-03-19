@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ItemSaleCard from "../components/ItemSaleCard";
-import SearchBar from "../components/SearchBar";
+import SearchBarItems from "../components/SearchBarItems";
 import UnauthDisplay from "../components/UnauthDisplay";
 import { getCookie } from "../cookieManager";
 import AddItemSaleCard from "../components/AddItemSaleCard";
@@ -82,7 +82,7 @@ const ItemCardsForSalePage = () => {
 
       <div className="container">
         <AddItemSaleCard modalTitle="Add a new item" buttonTitle="Add item" type="items for sale" user={getCookie("email")} />
-        <SearchBar searchInput={searchInput} handleSearchChange={handleSearchChange} />
+        <SearchBarItems searchInput={searchInput} handleSearchChange={handleSearchChange} />
 
         {isLoading
           ? <Spinner />

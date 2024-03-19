@@ -9,6 +9,7 @@ const ItemWantedCard = (props) => {
 	const [newImage, setNewImage] = useState();
 	const [newDesc, setNewDesc] = useState(props.item.description);
 	const [noImage, setNoImage] = useState(false);
+	const [newTag, setNewTag] = React.useState(props.item.tag);
 
 	const editClick = () => {
 		setEditing(true);
@@ -23,6 +24,7 @@ const ItemWantedCard = (props) => {
 		setNewTitle(props.item.title);
 		setNewDesc(props.item.description);
 		setNewImage();
+		setNewTag(props.item.tag);
 		setEditing(false);
 		setNoImage(false);
 	};
@@ -50,7 +52,7 @@ const ItemWantedCard = (props) => {
 		}
 		await fetch("http://localhost:3001/api/item-wanted/edit-item", {
 			method: 'POST',
-			body: JSON.stringify({ id: props.item._id, title: newTitle, description: newDesc, image: file, oldImage: props.item.image }),
+			body: JSON.stringify({ id: props.item._id, title: newTitle, description: newDesc, image: file, oldImage: props.item.image, tag: newTag }),
 			headers: { "Content-Type": "application/json" }
 		});
 
@@ -65,6 +67,7 @@ const ItemWantedCard = (props) => {
 					<h4 className="card-title">{props.item.title}</h4>
 					<p className="card-text">{props.item.user}</p>
 					<p className="card-text">{props.item.description}</p>
+					<p className="card-text">{props.item.tag}</p>
 					{getCookie("email") === props.item.user
 						? <>
 							<button type="button" className="btn btn-success" onClick={editClick}>Edit</button>
@@ -95,6 +98,14 @@ const ItemWantedCard = (props) => {
 					<div className="mb-3">
 						<label htmlFor="item-description" className="form-label">Description</label>
 						<textarea className="form-control" id="item-description" value={newDesc} onChange={(e) => setNewDesc(e.target.value)} required />
+					</div>
+					<div className="mb-3">
+						<label htmlFor="item-tag" className="form-label">Tag</label>
+						<select className="form-control" id="item-tag" value={newTag} onChange={(e) => setNewTag(e.target.value)} required>
+        					<option value="textbooks">Textbooks</option>
+							<option value="tools">Tools</option>
+							<option value="other">Other</option>
+						</select>
 					</div>
 					<button type="button" className="btn btn-danger" id="cancel-button" onClick={clearForm}>Cancel</button>
 					<button type="submit" className="btn btn-primary" style={{ marginLeft: '10px' }}>Submit</button>

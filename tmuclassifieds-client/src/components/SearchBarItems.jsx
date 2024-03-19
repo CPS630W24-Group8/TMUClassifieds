@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SearchBar = ({ searchInput, handleSearchChange }) => {
+const SearchBarItems = ({ searchInput, handleSearchChange }) => {
   return (
     <div className="row">
       <div className="col-md-4">
@@ -34,4 +34,4 @@ const SearchBar = ({ searchInput, handleSearchChange }) => {
   );
 };
 
-export default SearchBar;
+export default SearchBarItems;

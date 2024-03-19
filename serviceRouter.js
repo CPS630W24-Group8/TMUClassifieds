@@ -4,12 +4,12 @@ const service = require("./model/service");
 
 // create new service and add to database
 router.route("/add-service").post(async (request, response) => {
-  const {title, description, user} = request.body;
+  const {title, description, user, tag} = request.body;
   console.log(title+ " - "+description);
 
   try {
     await service.create({
-      title, description, user
+      title, description, user, tag
     }).then(service =>
       response.status(200).json({
         message: "Service sucessfully created",
@@ -84,7 +84,7 @@ router.route("/delete-service").post(async (request, response) => {
 
 // edit service
 router.route("/edit-service").post(async (request, response) => {
-  const update = { title: request.body.title, description: request.body.description };
+  const update = { title: request.body.title, description: request.body.description, tag: request.body.tag };
   console.log(update);
   try {
     await service.findByIdAndUpdate(request.body.id, update).then(service =>

@@ -5,23 +5,23 @@ const fs = require('fs');
 
 // create new items and add to database
 router.route("/add-item").post(async (request, response) => {
-  const {title, image, description, user, price} = request.body;
+  const { title, image, description, user, price, tag } = request.body; 
   console.log("image: "+image);
   console.log(title+ " - "+description);
 
   try {
     await itemSale.create({
-      title, image, description, user, price,
+      title, image, description, user, price, tag, 
     }).then(item =>
       response.status(200).json({
-        message: "Item sucessfully created",
+        message: "Item successfully created",
         item,
       })
     );
   } catch (error) {
     console.log("error: ", error.message);
     return response.status(401).json({
-      message: "Item not successful created",
+      message: "Item not successfully created",
       error: error.message,
     });
   }
@@ -98,7 +98,8 @@ router.route("/delete-item").post(async (request, response) => {
 
 // edit item
 router.route("/edit-item").post(async (request, response) => {
-  const update = { title: request.body.title, image: request.body.image, description: request.body.description, price: request.body.price };
+  const { id, title, image, description, price, tag } = request.body;
+  const update = { title, image, description, price, tag }; 
   console.log(update);
 
   // delete image file

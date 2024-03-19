@@ -6,6 +6,7 @@ const AddItemSaleCard = (props) => {
 	const [newImage, setNewImage] = React.useState();
 	const [newPrice, setNewPrice] = React.useState(0);
 	const [newDesc, setNewDesc] = React.useState("");
+	const [newTag, setNewTag] = React.useState("");
 
 	const imageFile = React.useRef(null);
 
@@ -17,6 +18,7 @@ const AddItemSaleCard = (props) => {
 		setNewPrice(0);
 		setNewDesc("");
 		setNewImage();
+		setNewTag("");
 	};
 
 	const onSubmit = async (event) => {
@@ -41,7 +43,7 @@ const AddItemSaleCard = (props) => {
 		console.log("image: ", image);
 		const result = await fetch("http://localhost:3001/api/item-sale/add-item", {
 			method: 'POST',
-			body: JSON.stringify({ title: newTitle, description: newDesc, image: image, user: props.user, price: newPrice }),
+			body: JSON.stringify({ title: newTitle, description: newDesc, image: image, user: props.user, price: newPrice, tag: newTag }),
 			headers: { "Content-Type": "application/json" }
 		});
 		console.log("post: " + result.data);
@@ -77,6 +79,14 @@ const AddItemSaleCard = (props) => {
 								<div className="mb-3">
 									<label htmlFor="item-description" className="col-form-label">Description</label>
 									<textarea className="form-control" id="item-description" value={newDesc} onChange={(e) => setNewDesc(e.target.value)} required />
+								</div>
+								<div className="mb-3">
+									<label htmlFor="item-tag" className="form-label">Tag</label>
+									<select name="item-tag" id="item-tag" onChange={(e) => setNewTag(e.target.value)}>
+										<option value="textbooks">Textbooks</option>
+										<option value="tools">Tools</option>
+										<option value="other">Other</option>
+									</select>
 								</div>
 								<div className="modal-footer">
 									<button type="button" className="btn btn-danger" id="cancel-button" data-bs-dismiss="modal" onClick={clearModal}>Cancel</button>

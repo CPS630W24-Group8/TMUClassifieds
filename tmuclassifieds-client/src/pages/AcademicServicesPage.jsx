@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ServiceCard from "../components/ServiceCard";
-import SearchBar from "../components/SearchBar";
+import SearchBarServices from "../components/SearchBarServices";
 import UnauthDisplay from "../components/UnauthDisplay";
 import { getCookie } from "../cookieManager";
 import AddServiceCard from "../components/AddServiceCard";
@@ -82,7 +82,7 @@ const AcademicServicesPage = () => {
 
       <div className="container">
         <AddServiceCard modalTitle="Add a new service" buttonTitle="Add service" user={getCookie("email")} />
-        <SearchBar searchInput={searchInput} handleSearchChange={handleSearchChange} />
+        <SearchBarServices searchInput={searchInput} handleSearchChange={handleSearchChange} />
 
         {isLoading
           ? <Spinner />
