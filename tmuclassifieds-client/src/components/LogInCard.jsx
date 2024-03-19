@@ -82,7 +82,7 @@ const LogInCard = ({ onLoggedIn }) => {
           <label className="form-check-label" htmlFor="rememberCheck">Remember me</label>
         </div>
         <br />
-        <button type="submit" className="btn btn-primary">Log In</button>
+        <button type="submit" className="btn btn-primary" id="loginButton">Log In</button>
       </form>
     </div>
   );

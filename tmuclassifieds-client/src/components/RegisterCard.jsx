@@ -45,6 +45,8 @@ const RegisterCard = ({ onRegistered }) => {
     if (response.status === 200) {
       setCookie("email", email);
       onRegistered();
+    } else {
+      setErrorMessage(`Error: ${response.status} ${response.statusText}`);
     }
   };
 
@@ -89,7 +91,7 @@ const RegisterCard = ({ onRegistered }) => {
         <br />
         {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
         <br />
-        <button type="submit" className="btn btn-primary">Register</button>
+        <button type="submit" className="btn btn-primary" id="registerButton">Register</button>
       </form>
 
       <div className="toast-container position-fixed bottom-0 end-0">

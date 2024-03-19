@@ -21,7 +21,7 @@ const LandingPage = () => {
           <Header title="Welcome to TMU Classifieds" description="Find what you need or offer what you have within the TMU community." />
           <br />
           <div className="container">
-            <p className="fs-5 text-center">Some text here to describe the web site</p>
+            <p className="fs-5 text-center">Some text here to describe the website</p>
           </div>
         </div>
 

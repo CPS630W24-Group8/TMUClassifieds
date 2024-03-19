@@ -24,7 +24,7 @@ const Navbar = () => {
             <a className="nav-link" href="/academic-services">Academic Services</a>
           </div>
           <a className="nav-link" href="/profile" role="button">Profile</a>
-          <button type="button" className="btn btn-secondary" onClick={logout} style={{marginLeft: "10px"}}>Logout</button>
+          <button type="button" className="btn btn-secondary" id="logoutButton" onClick={logout} style={{marginLeft: "10px"}}>Logout</button>
         </div>
       </div>
     </nav>
