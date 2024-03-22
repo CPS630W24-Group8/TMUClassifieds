@@ -129,4 +129,37 @@ router.route("/edit-item").post(async (request, response) => {
     }
 });
 
+// delete all user's items from database
+router.route("/delete-all").post(async (request, response) => {
+  const { email, items } = request.body;
+  try {
+    await itemSale.deleteMany( { "user" : email } ).then(result => {
+      response.status(200).json({
+        message: "Items sucessfully deleted",
+        result,
+      })}
+    );
+  } catch (error) {
+    console.log("error: ", error.message);
+    return response.status(401).json({
+      message: "Items not successful deleted",
+      error: error.message,
+    });
+  }
+  if (items != null) {
+    for (let item of items) {
+      // delete image file
+      if (item.image != "imageIcon.png") {
+        fs.unlink("./tmuclassifieds-client/src/images/"+item.image, (error) => {
+          if (error) {
+            console.log("error:", error.message);
+          } else { 
+            console.log("File "+item.image+" is deleted");
+          }
+        });
+      }
+    }
+  }
+});
+
 module.exports = router;

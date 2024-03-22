@@ -106,3 +106,24 @@ exports.changePassword = async (request, response, next) => {
     });
   }
 }
+
+// Delete user from the database
+exports.deleteAccount = async (request, response, next) => {
+  const email = request.body.email;
+  try {
+    await user.deleteOne(
+      { email: email }
+    ).then(user =>
+      response.status(200).json({
+        message: "User successfully deleted",
+        user,
+      })
+    );
+  } catch (error) {
+    console.log("error: ", error.message);
+    return response.status(401).json({
+      message: "User not successful deleted",
+      error: error.mesage,
+    });
+  }
+}

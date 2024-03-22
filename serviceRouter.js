@@ -102,6 +102,23 @@ router.route("/edit-service").post(async (request, response) => {
     }
 });
 
-
+// delete all user's services from database
+router.route("/delete-all").post(async (request, response) => {
+  const email = request.body.email;
+  try {
+    await service.deleteMany( { "user" : email } ).then(result => {
+      response.status(200).json({
+        message: "Services sucessfully deleted",
+        result,
+      })}
+    );
+  } catch (error) {
+    console.log("error: ", error.message);
+    return response.status(401).json({
+      message: "Services not successful deleted",
+      error: error.message,
+    });
+  }
+});
 
 module.exports = router;

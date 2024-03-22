@@ -11,8 +11,9 @@ import { getCookie, setCookie } from "../cookieManager";
 
 const ProfilePage = () => {
 	const [selectButton, setSelectButton] = useState();
-	const [allItems, setAllItems] = React.useState();
-	const [allServices, setAllServices] = React.useState();
+	const [allItemsWanted, setAllItemsWanted] = useState();
+	const [allItemsSale, setAllItemsSale] = useState();
+	const [allServices, setAllServices] = useState();
 	const [waiting, setWaiting] = useState(false);
 	const [loggedIn, setLoggedIn] = useState(0);
 
@@ -29,13 +30,13 @@ const ProfilePage = () => {
 			await fetch(`http://localhost:3001/api/item-wanted/get-user-item?user=${getCookie('email')}`)
 				.then(data => data.json())
 				.then(item => {
-					setAllItems(item.data);
+					setAllItemsWanted(item.data);
 				});
 		} else if (selectButton === "Items for Sale") {
 			await fetch(`http://localhost:3001/api/item-sale/get-user-item?user=${getCookie('email')}`)
 				.then(data => data.json())
 				.then(item => {
-					setAllItems(item.data);
+					setAllItemsSale(item.data);
 				});
 		} else if (selectButton === "Academic Services") {
 			await fetch(`http://localhost:3001/api/service/get-user-service?user=${getCookie('email')}`)
@@ -43,43 +44,115 @@ const ProfilePage = () => {
 				.then(service => {
 					setAllServices(service.data);
 				});
-		} else if (selectButton === "Contacts") {
-
+		} else if (selectButton === "Settings") {
+			// get all user's items wanted
+			await fetch(`http://localhost:3001/api/item-wanted/get-user-item?user=${getCookie('email')}`)
+				.then(data => data.json())
+				.then(item => {
+					setAllItemsWanted(item.data);
+				});
+			// get all user's items for sale
+			await fetch(`http://localhost:3001/api/item-sale/get-user-item?user=${getCookie('email')}`)
+				.then(data => data.json())
+				.then(item => {
+					setAllItemsSale(item.data);
+				});
+			// get all user's services
+			await fetch(`http://localhost:3001/api/service/get-user-service?user=${getCookie('email')}`)
+				.then(data => data.json())
+				.then(service => {
+					setAllServices(service.data);
+				});
 		}
 		setWaiting(false);
 	}
 
 	const changeEmail = async (event) => {
 		event.preventDefault();
-		await fetch("http://localhost:3001/api/auth/change-email", {
-			method: "POST",
-			body: JSON.stringify({ oldEmail: getCookie("email"), newEmail: event.target[0].value }),
-			headers: { "Content-Type": "application/json" }
-		}).then((result => result.json())).then(user => {
-			if (user.user.email === getCookie("email")) {
-				setCookie("email", event.target[0].value);
-				window.location.reload();
-			}
-		});
+		const message = document.getElementById("message-email");
+		const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+		// check if the email input's format is correct
+		if (!emailPattern.test(event.target[0].value)) {
+			// create error message
+			message.className = "p-3 mb-2 bg-danger text-white";
+			message.innerHTML = "Please enter a valid email address.";
+		} else {
+			message.className = "";
+			message.innerHTML = "";
+			await fetch("http://localhost:3001/api/auth/change-email", {
+				method: "POST",
+				body: JSON.stringify({ oldEmail: getCookie("email"), newEmail: event.target[0].value }),
+				headers: { "Content-Type": "application/json" }
+			}).then((result => result.json())).then(user => {
+				if (user.user.email === getCookie("email")) {
+					setCookie("email", event.target[0].value);
+					window.location.reload();
+				}
+			});
+		}
 	}
 
 	const changePassword = async (event) => {
 		event.preventDefault();
-		await fetch("http://localhost:3001/api/auth/change-password", {
-			method: "POST",
-			body: JSON.stringify({ email: getCookie("email"), oldPassword: event.target[0].value, newPassword: event.target[1].value }),
-			headers: { "Content-Type": "application/json" }
-		}).then((result => result.json())).then(user => {
-			const message = document.getElementById("message-password");
-			if (user.user == null) {
-				message.className = "p-3 mb-2 bg-danger text-white";
-				message.innerHTML = "Wrong password. Please enter the correct password.";
-			} else {
-				message.className = "";
-				message.innerHTML = "";
+		const message = document.getElementById("message-password");
+		if (event.target[1].value.length < 6) {
+			// create error message
+			message.className = "p-3 mb-2 bg-danger text-white";
+			message.innerHTML = "Password must be at least 6 characters long.";
+		} else {
+			message.className = "";
+			message.innerHTML = "";
+
+			await fetch("http://localhost:3001/api/auth/change-password", {
+				method: "POST",
+				body: JSON.stringify({ email: getCookie("email"), oldPassword: event.target[0].value, newPassword: event.target[1].value }),
+				headers: { "Content-Type": "application/json" }
+			}).then((result => result.json())).then(user => {
+				// create error message
+				if (user.user == null) { 
+					// input password does not match user's current password
+					message.className = "p-3 mb-2 bg-danger text-white";
+					message.innerHTML = "Wrong password. Please enter the correct password.";
+				} else {
+					window.location.reload();
+				}
+			});
+		}
+	}
+
+	const deleteAccount = async () => {
+		if (window.confirm("Are you sure you want to delete your account?")) {
+			await fetch("http://localhost:3001/api/auth/delete", {
+				method: 'POST',
+				body: JSON.stringify({ email: getCookie("email") }),
+				headers: { "Content-Type": "application/json" }
+			}).then(async response => {
+				if (response.status == 200) {
+					// delete all user's items wanted
+					await fetch("http://localhost:3001/api/item-wanted/delete-all", {
+						method: 'POST',
+						body: JSON.stringify({ email: getCookie("email"), items: allItemsWanted }),
+						headers: { "Content-Type": "application/json" }
+					});
+
+					// delete all user's items for sale
+					await fetch("http://localhost:3001/api/item-sale/delete-all", {
+						method: 'POST',
+						body: JSON.stringify({ email: getCookie("email"), items: allItemsSale }),
+						headers: { "Content-Type": "application/json" }
+					});
+
+					// delete all user's service
+					await fetch("http://localhost:3001/api/service/delete-all", {
+						method: 'POST',
+						body: JSON.stringify({ email: getCookie("email") }),
+						headers: { "Content-Type": "application/json" }
+					});
+				}
+				setCookie("email", "");
 				window.location.reload();
-			}
-		});
+			});
+		}
 	}
 
 	// change the display of right side page based on the selected option on the left side
@@ -88,10 +161,10 @@ const ProfilePage = () => {
 			return (
 				<div className="container">
 					<div className="row justify-content-center">
-						{allItems == null
+						{allItemsWanted == null
 							? ""
-							: allItems.map(item =>
-								<div className="col-4">
+							: allItemsWanted.map(item =>
+								<div className="col-md-4">
 									<ItemWantedCard item={item} />
 								</div>
 							)
@@ -103,10 +176,10 @@ const ProfilePage = () => {
 			return (
 				<div className="container">
 					<div className="row justify-content-center">
-						{allItems == null
+						{allItemsSale == null
 							? ""
-							: allItems.map(item =>
-								<div className="col-4">
+							: allItemsSale.map(item =>
+								<div className="col-md-4">
 									<ItemSaleCard item={item} />
 								</div>
 							)
@@ -121,7 +194,7 @@ const ProfilePage = () => {
 						{allServices == null
 							? ""
 							: allServices.map(service =>
-								<div className="col-4">
+								<div className="col-md-4">
 									<ServiceCard service={service} />
 								</div>
 							)
@@ -135,6 +208,7 @@ const ProfilePage = () => {
 			return (
 				<div>
 					<p className="fs-5 text-warning-emphasis">Change Email Address</p>
+					<p id="message-email" className=""></p>
 					<form onSubmit={changeEmail}>
 						<div className="mb-3">
 							<label htmlFor="new-email" className="form-label">New email address</label>
@@ -142,6 +216,7 @@ const ProfilePage = () => {
 						</div>
 						<button type="submit" className="btn btn-primary mb-5">Submit</button>
 					</form>
+
 					<p className="fs-5 text-warning-emphasis">Change Password</p>
 					<p id="message-password" className=""></p>
 					<form onSubmit={changePassword}>
@@ -153,8 +228,12 @@ const ProfilePage = () => {
 							<label htmlFor="new-password" className="form-label">New password</label>
 							<input type="password" className="form-control" id="new-password" required />
 						</div>
-						<button type="submit" className="btn btn-primary">Submit</button>
+						<button type="submit" className="btn btn-primary mb-5">Submit</button>
 					</form>
+
+					<p className="fs-5 text-warning-emphasis">Delete Account</p>
+					<p>Delete your account will also delete all your posts and chats from Items Wanted, Items for Sale and Academic Services.</p>
+					<button className="btn btn-danger" onClick={deleteAccount}>Delete</button>
 				</div>
 			);
 		}
