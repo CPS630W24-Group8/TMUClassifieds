@@ -5,7 +5,7 @@ const AddItemWantedCard = (props) => {
 	const [newTitle, setNewTitle] = React.useState("");
 	const [newImage, setNewImage] = React.useState();
 	const [newDesc, setNewDesc] = React.useState("");
-	const [newTag, setNewTag] = React.useState("");
+	const [newTag, setNewTag] = React.useState("textbooks");
 
 	const imageFile = React.useRef(null);
 
@@ -16,7 +16,7 @@ const AddItemWantedCard = (props) => {
 		setNewTitle("");
 		setNewDesc("");
 		setNewImage();
-		setNewTag("");
+		setNewTag("textbooks");
 	};
 
 	const onSubmit = async (event) => {
@@ -42,7 +42,7 @@ const AddItemWantedCard = (props) => {
 		console.log("image: ", image);
 		const result = await fetch("http://localhost:3001/api/item-wanted/add-item", {
 			method: 'POST',
-			body: JSON.stringify({ title: newTitle, description: newDesc, image: image, user: props.user, tag: newTag}),
+			body: JSON.stringify({ title: newTitle, description: newDesc, image: image, user: props.user, tag: newTag }),
 			headers: { "Content-Type": "application/json" }
 		});
 		console.log("post: " + result.data);
@@ -77,7 +77,7 @@ const AddItemWantedCard = (props) => {
 								</div>
 								<div className="mb-3">
 									<label htmlFor="item-tag" className="form-label">Tag</label>
-									<select name="item-tag" id="item-tag" onChange={(e) => setNewTag(e.target.value)}>
+									<select className="form-select" name="item-tag" id="item-tag" onChange={(e) => setNewTag(e.target.value)}>
 										<option value="textbooks">Textbooks</option>
 										<option value="tools">Tools</option>
 										<option value="other">Other</option>

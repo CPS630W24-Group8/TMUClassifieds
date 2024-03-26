@@ -40,7 +40,7 @@ const ServiceCard = (props) => {
 					<h4 className="card-title">{props.service.title}</h4>
 					<p className="card-text">{props.service.user}</p>
 					<p className="card-text">{props.service.description}</p>
-					<p className="card-text">{props.service.tag}</p>
+					<p className="card-text"><strong>{props.service.tag}</strong></p>
 					{getCookie("email") === props.service.user
 						? <>
 							<button type="button" className="btn btn-success" onClick={editClick}>Edit</button>
@@ -66,8 +66,8 @@ const ServiceCard = (props) => {
 					</div>
 					<div className="mb-3">
 						<label htmlFor="service-tag" className="form-label">Tag</label>
-						<select className="form-control" id="service-tag" value={newTag} onChange={(e) => setNewTag(e.target.value)} required>
-        					<option value="math">Math</option>
+						<select className="form-select" id="service-tag" value={newTag} onChange={(e) => setNewTag(e.target.value)} required>
+							<option value="math">Math</option>
 							<option value="writing">Writing</option>
 							<option value="other">Other</option>
 						</select>

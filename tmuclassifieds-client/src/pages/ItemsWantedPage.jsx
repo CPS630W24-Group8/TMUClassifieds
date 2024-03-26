@@ -14,6 +14,7 @@ const ItemsWantedPage = () => {
   const [loggedIn, setLoggedIn] = useState(0);
   const [searchInput, setSearchInput] = useState('');
   const [filteredItems, setFilteredItems] = useState();
+  const [tagList, setTagList] = useState([]);
   const [allItems, setAllItems] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -62,6 +63,28 @@ const ItemsWantedPage = () => {
     setFilteredItems(splitFiltered);
   };
 
+  // Handle filter
+  const handleFilterChange = (event) => {
+    const checked = event.target.checked;
+    const value = event.target.value;
+
+    if (checked) {
+      tagList.push(value);
+    } else {
+      tagList.splice(tagList.indexOf(value), 1);
+    }
+
+    let filtered = [];
+    allItems.map(itemRow => {
+      itemRow.map(item => {
+        if (tagList.includes(item.tag) || tagList.length === 0) filtered.push(item);
+      })
+    });
+
+    const splitFiltered = splitListInto(filtered, 3);
+    setFilteredItems(splitFiltered);
+  }
+
   // Do not render content if user is not logged in
   if (!loggedIn) {
     return (
@@ -82,7 +105,11 @@ const ItemsWantedPage = () => {
 
       <div className="container">
         <AddItemWantedCard modalTitle="Add a new item" buttonTitle="Add item" type="items wanted" user={getCookie("email")} />
-        <SearchBarItems searchInput={searchInput} handleSearchChange={handleSearchChange} />
+        <SearchBarItems
+          searchInput={searchInput}
+          handleSearchChange={handleSearchChange}
+          handleFilterChance={handleFilterChange}
+        />
 
         {isLoading
           ? <Spinner />

@@ -14,6 +14,7 @@ const AcademicServicesPage = () => {
   const [loggedIn, setLoggedIn] = useState(0);
   const [searchInput, setSearchInput] = useState('');
   const [filteredServices, setFilteredServices] = useState();
+  const [tagList, setTagList] = useState([]);
   const [allServices, setAllServices] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -62,6 +63,28 @@ const AcademicServicesPage = () => {
     setFilteredServices(splitFiltered);
   };
 
+  // Handle filter
+  const handleFilterChange = (event) => {
+    const checked = event.target.checked;
+    const value = event.target.value;
+
+    if (checked) {
+      tagList.push(value);
+    } else {
+      tagList.splice(tagList.indexOf(value), 1);
+    }
+
+    let filtered = [];
+    allServices.map(serviceRow => {
+      serviceRow.map(service => {
+        if (tagList.includes(service.tag) || tagList.length === 0) filtered.push(service);
+      })
+    });
+
+    const splitFiltered = splitListInto(filtered, 3);
+    setFilteredServices(splitFiltered);
+  }
+
   // Do not render content if user is not logged in
   if (!loggedIn) {
     return (
@@ -82,7 +105,11 @@ const AcademicServicesPage = () => {
 
       <div className="container">
         <AddServiceCard modalTitle="Add a new service" buttonTitle="Add service" user={getCookie("email")} />
-        <SearchBarServices searchInput={searchInput} handleSearchChange={handleSearchChange} />
+        <SearchBarServices
+          searchInput={searchInput}
+          handleSearchChange={handleSearchChange}
+          handleFilterChance={handleFilterChange}
+        />
 
         {isLoading
           ? <Spinner />

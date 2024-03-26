@@ -71,7 +71,7 @@ const ItemSaleCard = (props) => {
 					<p className="card-text">{props.item.user}</p>
 					<p className="card-text">${props.item.price}</p>
 					<p className="card-text">{props.item.description}</p>
-					<p className="card-text">{props.item.tag}</p>
+					<p className="card-text"><strong>{props.item.tag}</strong></p>
 					{getCookie("email") === props.item.user
 						? <>
 							<button type="button" className="btn btn-success" onClick={editClick}>Edit</button>
@@ -97,7 +97,7 @@ const ItemSaleCard = (props) => {
 					</div>
 					<div className="mb-3">
 						<input className="form-check-input" type="checkbox" id="wantNoImage" onChange={(e) => setNoImage(e.target.checked)} />
-						<label className="form-check-label" htmlFor="wantNoImage" style={{marginLeft: "10px"}}> Select no image file</label>
+						<label className="form-check-label" htmlFor="wantNoImage" style={{ marginLeft: "10px" }}> Select no image file</label>
 					</div>
 					<div className="mb-3">
 						<label htmlFor="item-price" className="form-label">Price</label>
@@ -109,8 +109,8 @@ const ItemSaleCard = (props) => {
 					</div>
 					<div className="mb-3">
 						<label htmlFor="item-tag" className="form-label">Tag</label>
-						<select className="form-control" id="item-tag" value={newTag} onChange={(e) => setNewTag(e.target.value)} required>
-        					<option value="textbooks">Textbooks</option>
+						<select className="form-select" id="item-tag" value={newTag} onChange={(e) => setNewTag(e.target.value)} required>
+							<option value="textbooks">Textbooks</option>
 							<option value="tools">Tools</option>
 							<option value="other">Other</option>
 						</select>

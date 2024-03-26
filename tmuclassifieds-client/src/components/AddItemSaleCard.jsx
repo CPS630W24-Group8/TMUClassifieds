@@ -6,7 +6,7 @@ const AddItemSaleCard = (props) => {
 	const [newImage, setNewImage] = React.useState();
 	const [newPrice, setNewPrice] = React.useState(0);
 	const [newDesc, setNewDesc] = React.useState("");
-	const [newTag, setNewTag] = React.useState("");
+	const [newTag, setNewTag] = React.useState("textbooks");
 
 	const imageFile = React.useRef(null);
 
@@ -18,7 +18,7 @@ const AddItemSaleCard = (props) => {
 		setNewPrice(0);
 		setNewDesc("");
 		setNewImage();
-		setNewTag("");
+		setNewTag("textbooks");
 	};
 
 	const onSubmit = async (event) => {
@@ -82,7 +82,7 @@ const AddItemSaleCard = (props) => {
 								</div>
 								<div className="mb-3">
 									<label htmlFor="item-tag" className="form-label">Tag</label>
-									<select name="item-tag" id="item-tag" onChange={(e) => setNewTag(e.target.value)}>
+									<select className="form-select" name="item-tag" id="item-tag" onChange={(e) => setNewTag(e.target.value)}>
 										<option value="textbooks">Textbooks</option>
 										<option value="tools">Tools</option>
 										<option value="other">Other</option>

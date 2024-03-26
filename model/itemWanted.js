@@ -15,6 +15,10 @@ const itemWantedSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  tag: {
+    type: String,
+    required: true
+  },
 });
 
 const itemWanted = db.model("itemWanted", itemWantedSchema, "itemwanteds");

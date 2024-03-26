@@ -14,6 +14,10 @@ const serviceSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  tag: {
+    type: String,
+    required: true
+  },
 });
 
 const service = db.model("service", serviceSchema, 'services');

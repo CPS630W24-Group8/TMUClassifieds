@@ -3,12 +3,12 @@ import React from "react";
 const AddServiceCard = (props) => {
 	const [newTitle, setNewTitle] = React.useState("");
 	const [newDesc, setNewDesc] = React.useState("");
-	const [newTag, setNewTag] = React.useState("");
+	const [newTag, setNewTag] = React.useState("math");
 
 	const clearModal = () => {
 		setNewTitle("");
 		setNewDesc("");
-		setNewTag("");
+		setNewTag("math");
 	};
 
 	const onSubmit = async (event) => {
@@ -51,7 +51,7 @@ const AddServiceCard = (props) => {
 								</div>
 								<div className="mb-3">
 									<label htmlFor="item-tag" className="form-label">Tag</label>
-									<select name="item-tag" id="item-tag" onChange={(e) => setNewTag(e.target.value)}>
+									<select className="form-select" name="item-tag" id="item-tag" onChange={(e) => setNewTag(e.target.value)}>
 										<option value="math">Math</option>
 										<option value="writing">Writing</option>
 										<option value="other">Other</option>
