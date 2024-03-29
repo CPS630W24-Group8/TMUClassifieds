@@ -41,7 +41,7 @@ const ServiceCard = (props) => {
 					<p className="card-text">{props.service.user}</p>
 					<p className="card-text">{props.service.description}</p>
 					<p className="card-text"><strong>{props.service.tag}</strong></p>
-					{getCookie("email") === props.service.user
+					{getCookie("email") === props.service.user || props.isAdmin
 						? <>
 							<button type="button" className="btn btn-success" onClick={editClick}>Edit</button>
 							<DeleteEntry type="service" entry={props.service} />

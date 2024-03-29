@@ -72,7 +72,7 @@ const ItemSaleCard = (props) => {
 					<p className="card-text">${props.item.price}</p>
 					<p className="card-text">{props.item.description}</p>
 					<p className="card-text"><strong>{props.item.tag}</strong></p>
-					{getCookie("email") === props.item.user
+					{getCookie("email") === props.item.user || props.isAdmin
 						? <>
 							<button type="button" className="btn btn-success" onClick={editClick}>Edit</button>
 							<DeleteEntry type="item sale" entry={props.item} />

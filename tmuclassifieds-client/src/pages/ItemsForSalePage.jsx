@@ -15,7 +15,7 @@ const ItemCardsForSalePage = () => {
   const [searchInput, setSearchInput] = useState('');
   const [filteredItems, setFilteredItems] = useState();
   const [tagList, setTagList] = useState([]);
-  const [allItems, setAllItems] = React.useState(null);
+  const [allItems, setAllItems] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

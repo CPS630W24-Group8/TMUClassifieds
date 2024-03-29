@@ -5,7 +5,7 @@ const SearchBarServices = ({ searchInput, handleSearchChange, handleFilterChance
     <div className="container">
       <div className="row">
 
-        <div className="col-3">
+        <div className="col">
           <div className='btn-group' role='group' aria-label="Tags button group">
             <input type="checkbox" value="math" id="math-tag" className='btn-check' autoComplete='off' onChange={handleFilterChance} />
             <label htmlFor="math-tag" className="btn btn-outline-secondary">Math</label>
@@ -18,7 +18,7 @@ const SearchBarServices = ({ searchInput, handleSearchChange, handleFilterChance
           </div>
         </div>
 
-        <div className="col-9">
+        <div className="col">
           <input
             type="text"
             className="form-control"

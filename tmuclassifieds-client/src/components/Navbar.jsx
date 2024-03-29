@@ -23,8 +23,11 @@ const Navbar = () => {
             <a className="nav-link" href="/items-for-sale">Items for Sale</a>
             <a className="nav-link" href="/academic-services">Academic Services</a>
           </div>
-          <a className="nav-link" href="/profile" role="button">Profile</a>
-          <button type="button" className="btn btn-secondary" id="logoutButton" onClick={logout} style={{marginLeft: "10px"}}>Logout</button>
+          <div className="navbar-nav me-end">
+            <a className="nav-link" href="/profile">Profile</a>
+            <a className="nav-link" href="/admin">Admin</a>
+            <button type="button" className="btn btn-secondary" id="logoutButton" onClick={logout} style={{ marginLeft: "10px" }}>Logout</button>
+          </div>
         </div>
       </div>
     </nav>
