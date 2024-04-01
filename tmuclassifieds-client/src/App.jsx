@@ -9,6 +9,7 @@ import ItemsForSalePage from "./pages/ItemsForSalePage";
 import AcademicServicesPage from "./pages/AcademicServicesPage";
 import ProfilePage from "./pages/ProfilePage";
 import AdminPage from "./pages/AdminPage";
+import ContactPage from "./pages/ContactPage";
 
 const App = () => {
   // React routing reference: https://www.w3schools.com/react/react_router.asp
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/academic-services" Component={AcademicServicesPage} />
         <Route path="/profile" Component={ProfilePage} />
         <Route path="/admin" Component={AdminPage} />
+        <Route path="/contact" Component={ContactPage} />
       </Routes>
     </BrowserRouter>
   );

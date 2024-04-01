@@ -12,6 +12,41 @@ const ServiceCard = (props) => {
 		setEditing(true);
 	}
 
+	// create chat room
+	const createChatRoom = async (event) => {
+		event.preventDefault();
+		const data = JSON.parse(event.target.value);
+		const otherUser = data.user;
+		const title = data.title;
+		
+		// find if room exist
+		await fetch("http://localhost:3001/api/contact/find-room", {
+			method: 'POST',
+			body: JSON.stringify({ user: getCookie('email'), otherUser: otherUser, title: title }),
+			headers: { "Content-Type": "application/json" }
+		}).then(response => response.json())
+		.then(async data => {
+			if (data.data.length > 0) {
+				alert("Chat room already exist.");
+			}
+			else if (data.data.length == 0) {
+				// add chat room to database
+				await fetch("http://localhost:3001/api/contact/add-room", {
+					method: 'POST',
+					body: JSON.stringify({ user: getCookie('email'), otherUser: otherUser, title: title }),
+					headers: { "Content-Type": "application/json" }
+				}).then((result) => {
+					if (result.status === 200) {
+						alert("Chat room is successfully created.");
+					}
+					else {
+						alert(result.status + " - " + result.statusText);
+					}
+				});
+			}
+		});
+	}
+
 	const clearForm = () => {
 		setNewTitle(props.service.title);
 		setNewDesc(props.service.description);
@@ -46,7 +81,7 @@ const ServiceCard = (props) => {
 							<button type="button" className="btn btn-success" onClick={editClick}>Edit</button>
 							<DeleteEntry type="service" entry={props.service} />
 						</>
-						: <button type="button" className="btn btn-primary">Contact</button>}
+						: <button type="button" className="btn btn-primary" value={JSON.stringify({"user": props.service.user, "title": props.service.title})} onClick={createChatRoom}>Contact</button>}
 				</div>
 			</div>
 		);

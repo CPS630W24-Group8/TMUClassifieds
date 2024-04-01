@@ -127,7 +127,7 @@ const ProfilePage = () => {
 				body: JSON.stringify({ email: getCookie("email") }),
 				headers: { "Content-Type": "application/json" }
 			}).then(async response => {
-				if (response.status == 200) {
+				if (response.status === 200) {
 					// delete all user's items wanted
 					await fetch("http://localhost:3001/api/item-wanted/delete-all", {
 						method: 'POST',
@@ -202,8 +202,6 @@ const ProfilePage = () => {
 					</div>
 				</div>
 			);
-		} else if (selectButton === "Contacts") {
-			return;
 		} else if (selectButton === "Settings") {
 			return (
 				<div>
@@ -268,9 +266,6 @@ const ProfilePage = () => {
 
 							<input type="radio" className="btn-check" name="options" id="service" autoComplete="off" onClick={() => { setSelectButton("Academic Services") }} />
 							<label className="btn btn-secondary" htmlFor="service">Academic services created</label>
-
-							<input type="radio" className="btn-check" name="options" id="contact" autoComplete="off" onClick={() => { setSelectButton("Contacts") }} />
-							<label className="btn btn-secondary" htmlFor="contact">Contacts</label>
 
 							<input type="radio" className="btn-check" name="options" id="setting" autoComplete="off" onClick={() => { setSelectButton("Settings") }} />
 							<label className="btn btn-secondary" htmlFor="setting">Settings</label>
