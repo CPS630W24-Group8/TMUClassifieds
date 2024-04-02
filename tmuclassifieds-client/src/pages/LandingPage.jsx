@@ -21,7 +21,7 @@ const LandingPage = () => {
           <Header title="Welcome to TMU Classifieds" description="Find what you need or offer what you have within the TMU community." />
           <br />
           <div className="container">
-            <p className="fs-5 text-center">Some text here to describe the website</p>
+            <p className="fs-5 text-center">This is a platform where TMU students can post and browse classified ads, contact the posters for the desired items and services.</p>
           </div>
         </div>
 

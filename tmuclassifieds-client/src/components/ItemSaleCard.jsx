@@ -33,7 +33,7 @@ const ItemSaleCard = (props) => {
 			if (data.data.length > 0) {
 				alert("Chat room already exist.");
 			}
-			else if (data.data.length == 0) {
+			else if (data.data.length === 0) {
 				// add chat room to database
 				await fetch("http://localhost:3001/api/contact/add-room", {
 					method: 'POST',
