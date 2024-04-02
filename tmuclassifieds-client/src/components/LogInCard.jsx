@@ -37,6 +37,7 @@ const LogInCard = ({ onLoggedIn }) => {
       // Login is valid for 1 month if the checkbox is checked
       setCookie("email", email, remember ? 2628000 : "");
       onLoggedIn();
+      window.location.reload();
     } else {
       setErrorMessage(`Error: ${response.status} ${response.statusText}`);
     }

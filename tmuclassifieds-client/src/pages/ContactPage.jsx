@@ -15,8 +15,8 @@ const ContactPage = () => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-		setLoggedIn(getCookie("email") !== "");
-	}, []);
+    setLoggedIn(getCookie("email") !== "");
+  }, []);
 
   useEffect(() => async () => {
     const response = await fetch(`http://localhost:3001/api/contact/get-user-chat?user=${getCookie('email')}`)
@@ -41,7 +41,7 @@ const ContactPage = () => {
             headers: { "Content-Type": "application/json" }
           });
         }
-        let list = messages.concat([<ChatMessage user = {name} message = {data.message} date = {data.date} />]);
+        let list = messages.concat([<ChatMessage user={name} message={data.message} date={data.date} />]);
         list = getUniqueMessage(list);
         setMessages(list);
 
@@ -57,7 +57,7 @@ const ContactPage = () => {
     event.preventDefault();
     if (event.target[0].value.trim() !== "") {
       const date = new Date();
-      socket.emit('chat-message', {user: getCookie('email'), room: selectButton, message: event.target[0].value, date: date.toLocaleString("en-US") });
+      socket.emit('chat-message', { user: getCookie('email'), room: selectButton, message: event.target[0].value, date: date.toLocaleString("en-US") });
       // clear input
       event.target[0].value = "";
     }
@@ -84,7 +84,7 @@ const ContactPage = () => {
 
   // add initial chat messages from database when user first click on a chat
   const addInitialMessages = async (selected) => {
-    
+
     // get all messages from the chat
     const response = await fetch(`http://localhost:3001/api/contact/get-chat?user=${getCookie('email')}&title=${selected}`)
     response.json().then(data => {
@@ -96,11 +96,11 @@ const ContactPage = () => {
 
         for (let message of list) {
           let name = message.user;
-          
+
           if (message.user === getCookie('email')) {
             name = "You";
           }
-          printMessages.push(<ChatMessage user = {name} message = {message.body} date = {message.date} />);
+          printMessages.push(<ChatMessage user={name} message={message.body} date={message.date} />);
         }
         setMessages(printMessages);
       }
@@ -114,20 +114,20 @@ const ContactPage = () => {
 
     addInitialMessages(event.target.value);
     // start chatroom
-    socket.emit('join-room', {room: event.target.value});
+    socket.emit('join-room', { room: event.target.value });
   }
 
   if (!loggedIn) {
-		return (
-			<div>
-				<Navbar />
-				<Header title="Contact" />
-				<br />
-				<UnauthDisplay />
-				<Footer />
-			</div>
-		);
-	}
+    return (
+      <div>
+        <Navbar />
+        <Header title="Contact" />
+        <br />
+        <UnauthDisplay />
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -135,12 +135,12 @@ const ContactPage = () => {
       <Header title="Contacts" />
       <br />
       <div className="container">
-				<div className="row">
+        <div className="row">
           <div className="col-3">
             <div className="d-grid gap-2">
               {allChats == null || allChats.length === 0
                 ? <p>You are in no chat rooms.</p>
-                : allChats.map(chat => 
+                : allChats.map(chat =>
                   <button className="btn btn-secondary" value={chat.title} onClick={selectChat}>{chat.title}</button>
                 )}
             </div>
@@ -150,18 +150,20 @@ const ContactPage = () => {
               ? ""
               : <div className="container">
                 <p className="fs-3 text-center">{selectButton}</p>
-                <div id="message-container" className="overflow-auto" style={{ height: '410px' }}>
-                  {messages.map((message, i) => 
-                    <div key={i}>{message}</div>
-                  )}
-                </div>
-                <div id="send-container" style={{ marginTop: '20px' }}>
-                  <form onSubmit={sendMessage}>
-                    <div className="input-group mb-3">
-                      <input type="text" className="form-control" aria-describedby="message-input" />
-                      <button className="btn btn-outline-secondary" type="submit" id="message-input">Submit</button>
-                    </div>
-                  </form>
+                <div className="container">
+                  <div id="message-container" className="overflow-auto" style={{ height: '410px' }}>
+                    {messages.map((message, i) =>
+                      <div key={i}>{message}</div>
+                    )}
+                  </div>
+                  <div id="send-container" style={{ marginTop: '20px' }}>
+                    <form onSubmit={sendMessage}>
+                      <div className="input-group mb-3">
+                        <input type="text" className="form-control" aria-describedby="message-input" />
+                        <button className="btn btn-outline-secondary" type="submit" id="message-input">Submit</button>
+                      </div>
+                    </form>
+                  </div>
                 </div>
               </div>
             }

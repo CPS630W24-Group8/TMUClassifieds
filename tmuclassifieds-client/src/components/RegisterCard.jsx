@@ -45,6 +45,7 @@ const RegisterCard = ({ onRegistered }) => {
     if (response.status === 200) {
       setCookie("email", email);
       onRegistered();
+      window.location.reload();
     } else {
       setErrorMessage(`Error: ${response.status} ${response.statusText}`);
     }

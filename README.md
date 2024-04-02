@@ -23,9 +23,10 @@ Remember to install [NodeJS](https://nodejs.org/en) and [MongoDB](https://www.mo
 To run server:
 
 1. Open a terminal and navigate to the project root directory `(.../TMUClassifieds)`.
-2. Run `npm start`.
-3. Should see the message `Server started on port 3001` and `MongoDB connected`.
-4. To make sure everything works, on your web browser, go to <http://localhost:3001/api>, should see a JSON message:
+2. Run `npm install`.
+3. Run `npm start`.
+4. Should see the message `Server started on port 3001` and `MongoDB connected`.
+5. To make sure everything works, on your web browser, go to <http://localhost:3001/api>, should see a JSON message:
 
 ``` JSON
 {
@@ -38,6 +39,7 @@ Server is currently running on localhost for development. Reminder: before submi
 ## How to run client
 
 1. Open a terminal and navigate the client directory `(.../TMUClassifieds/tmuclassifieds-client)`.
-2. Run `npm start`.
-3. Should see a message `Compiled successfully`.
-4. On your web browser, go to <http://localhost:3000/>, should see the landing page.
+2. Run `npm install`.
+3. Run `npm start`.
+4. Should see a message `Compiled successfully`.
+5. On your web browser, go to <http://localhost:3000/>, should see the landing page.

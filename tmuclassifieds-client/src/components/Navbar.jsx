@@ -1,8 +1,14 @@
-import React from "react";
-import { setCookie } from "../cookieManager";
+import React, { useState, useEffect } from "react";
+import { setCookie, getCookie } from "../cookieManager";
 
 // https://getbootstrap.com/docs/5.3/components/navbar/
 const Navbar = () => {
+  const [loggedIn, setLoggedIn] = useState(0);
+
+  useEffect(() => {
+    setLoggedIn(getCookie("email") !== "");
+  }, []);
+
   const logout = () => {
     setCookie("email", "");
     window.location = "/";
@@ -22,12 +28,14 @@ const Navbar = () => {
             <a className="nav-link" href="/items-wanted">Items Wanted</a>
             <a className="nav-link" href="/items-for-sale">Items for Sale</a>
             <a className="nav-link" href="/academic-services">Academic Services</a>
-            <a className="nav-link" href="/contact">Contact</a>
           </div>
           <div className="navbar-nav me-end">
+            <a className="nav-link" href="/contact">Contact</a>
             <a className="nav-link" href="/profile">Profile</a>
             <a className="nav-link" href="/admin">Admin</a>
-            <button type="button" className="btn btn-secondary" id="logoutButton" onClick={logout} style={{ marginLeft: "10px" }}>Logout</button>
+            {loggedIn
+              ? <button type="button" className="btn btn-primary" id="logoutButton" onClick={logout} style={{ marginLeft: "10px" }}>Logout</button>
+              : ""}
           </div>
         </div>
       </div>
