@@ -14,6 +14,7 @@ const ContactPage = () => {
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
   const [messageUpdating, setMessageUpdating] = useState(false);
+  const [usersInChat, setUsersInChat] = useState(null);
 
   useEffect(() => {
     setLoggedIn(getCookie("email") !== "");
@@ -92,23 +93,26 @@ const ContactPage = () => {
 
   // add initial chat messages from database when user first click on a chat
   const addInitialMessages = async (selected) => {
-
     // get all messages from the chat
     const response = await fetch(`http://localhost:3001/api/contact/get-chat?user=${getCookie('email')}&title=${selected}`)
     response.json().then(data => {
       if (data.data != null) {
-        let list = data.data.messages;
+        setUsersInChat(data.data.users);
+
         let printMessages = [];
+        if (data.data.messages.length > 0) {
+          let list = data.data.messages;
 
-        list = getUniqueMessage(list);
+          list = getUniqueMessage(list);
 
-        for (let message of list) {
-          let name = message.user;
+          for (let message of list) {
+            let name = message.user;
 
-          if (message.user === getCookie('email')) {
-            name = "You";
+            if (message.user === getCookie('email')) {
+              name = "You";
+            }
+            printMessages.push(<ChatMessage user={name} message={message.body} date={message.date} />);
           }
-          printMessages.push(<ChatMessage user={name} message={message.body} date={message.date} />);
         }
         setMessages(printMessages);
         setMessageUpdating(false);
@@ -125,6 +129,31 @@ const ContactPage = () => {
     addInitialMessages(event.target.value);
     // start chatroom
     socket.emit('join-room', { room: event.target.value });
+  }
+
+  // remove user from the chat room's users list in database
+  const leaveChat = async (event) => {
+    event.preventDefault();
+    if (window.confirm("Are you sure you want to leave the chat room?")) {
+      await fetch("http://localhost:3001/api/contact/remove-user", {
+        method: 'POST',
+        body: JSON.stringify({ user: getCookie("email"), room: selectButton }),
+        headers: { "Content-Type": "application/json" }
+      }).then(async (response) => {
+        if (response.status === 200) {
+          // delete the room from database if there are no users
+          await fetch("http://localhost:3001/api/contact/delete-room", {
+            method: 'POST',
+            body: JSON.stringify({ room: selectButton }),
+            headers: { "Content-Type": "application/json" }
+          });
+          window.location.reload();
+        }
+        else {
+          alert(response.status + " - " + response.statusText);
+        }
+      });
+    }
   }
 
   if (!loggedIn) {
@@ -146,7 +175,7 @@ const ContactPage = () => {
       <br />
       <div className="container">
         <div className="row">
-          <div className="col-3">
+          <div className="col-3 overflow-auto" style={{ minWidth: "150px", maxHeight: '450px', marginBottom: "20px" }}>
             <div className="d-grid gap-2">
               {allChats == null || allChats.length === 0
                 ? <p>You are in no chat rooms.</p>
@@ -160,8 +189,23 @@ const ContactPage = () => {
               ? ""
               : <div className="container">
                 <p className="fs-3 text-center">{selectButton}</p>
+                <div className="row">
+                  <div className="col">
+                    {usersInChat == null
+                      ? ""
+                      : <p className="fw-bold">Users: 
+                        {usersInChat.map((message, i) =>
+                          <div key={i} className="fw-normal">{message}</div>
+                        )}
+                      </p>
+                    }
+                  </div>
+                  <div className="col text-end">
+                    <button type="button" class="btn btn-danger" onClick={leaveChat}>Leave chat</button>
+                  </div>
+                </div>
                 <div className="container">
-                  <div id="message-container" className="overflow-auto" style={{ height: '410px' }}>
+                  <div id="message-container" className="overflow-auto" style={{ height: '410px', marginTop: '20px' }}>
                     {messages.map((message, i) =>
                       <div key={i}>{message}</div>
                     )}

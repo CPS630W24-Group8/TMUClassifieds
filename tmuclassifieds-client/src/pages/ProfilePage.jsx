@@ -148,6 +148,22 @@ const ProfilePage = () => {
 						body: JSON.stringify({ email: getCookie("email") }),
 						headers: { "Content-Type": "application/json" }
 					});
+
+					// remove user from all chat rooms
+					await fetch("http://localhost:3001/api/contact/remove-user-all-chat", {
+						method: 'POST',
+						body: JSON.stringify({ user: getCookie("email") }),
+						headers: { "Content-Type": "application/json" }
+					}).then(async (response) => {
+						if (response.status === 200) {
+							// delete the room from database if there are no users
+							await fetch("http://localhost:3001/api/contact/delete-room", {
+								method: 'POST',
+								body: JSON.stringify({ room: selectButton }),
+								headers: { "Content-Type": "application/json" }
+							});
+						}
+					});
 				}
 				setCookie("email", "");
 				window.location.reload();

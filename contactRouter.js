@@ -106,4 +106,69 @@ router.route("/get-chat").get(async (request, response) => {
   }
 });
 
+// remove user from all chat room
+router.route("/remove-user-all-chat").post(async (request, response) => {
+  const user = request.body.user;
+  try {
+    await chatRoom.updateMany(
+      { users: user },
+      { $pull: { users: user } }
+    ).then(data =>
+      response.status(200).json({
+        message: "User sucessfully removed from all chats",
+        data: data,
+      })
+    );
+  } catch (error) {
+    console.log("error: ", error.message);
+    return response.status(401).json({
+      message: "User not successfully removed from all chats",
+      error: error.mesage,
+    });
+  }
+});
+
+// remove user from one chat room
+router.route("/remove-user").post(async (request, response) => {
+  const {user, room} = request.body;
+  try {
+    await chatRoom.findOneAndUpdate(
+      { users: user, title: room },
+      { $pull: { users: user } }
+    ).then(data =>
+      response.status(200).json({
+        message: "User sucessfully removed from chat",
+        data: data,
+      })
+    );
+  } catch (error) {
+    console.log("error: ", error.message);
+    return response.status(401).json({
+      message: "User not successfully removed from chat",
+      error: error.mesage,
+    });
+  }
+});
+
+// remove user from chat room
+router.route("/delete-room").post(async (request, response) => {
+  const room = request.body.room;
+  try {
+    await chatRoom.deleteOne(
+      { users: [], title: room }
+    ).then(data =>
+      response.status(200).json({
+        message: "Chat room sucessfully deleted",
+        data: data,
+      })
+    );
+  } catch (error) {
+    console.log("error: ", error.message);
+    return response.status(401).json({
+      message: "Chat room not successfully deleted",
+      error: error.mesage,
+    });
+  }
+});
+
 module.exports = router;

@@ -27,7 +27,7 @@ const ServiceCard = (props) => {
 		}).then(response => response.json())
 		.then(async data => {
 			if (data.data.length > 0) {
-				alert("Chat room already exist.");
+				alert("Chat room already exist. Please go to the Contact page to access the chat room.");
 			}
 			else if (data.data.length === 0) {
 				// add chat room to database
@@ -37,10 +37,10 @@ const ServiceCard = (props) => {
 					headers: { "Content-Type": "application/json" }
 				}).then((result) => {
 					if (result.status === 200) {
-						alert("Chat room is successfully created.");
+						alert("Chat room is successfully created. Please go to the Contact page to access the chat room.");
 					}
 					else {
-						alert(result.status + " - " + result.statusText);
+						alert(result.status + " - " + result.statusText + ". The chat room may already exist. Please go to the Contact page to access the chat room.");
 					}
 				});
 			}

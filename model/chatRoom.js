@@ -11,10 +11,7 @@ const chatRoomSchema = new mongoose.Schema({
   },
   messages: [{
     user: String,
-    date: {
-      type: String,
-      unique: true,
-    },
+    date: String,
     body: String
   }]
 });
