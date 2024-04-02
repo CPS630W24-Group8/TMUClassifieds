@@ -41,7 +41,9 @@ const ContactPage = () => {
             headers: { "Content-Type": "application/json" }
           });
         }
-      setMessages(chat => [...chat, <ChatMessage user = {name} message = {data.message} date = {data.date} />]);
+        let list = messages.concat([<ChatMessage user = {name} message = {data.message} date = {data.date} />]);
+        list = getUniqueMessage(list);
+        setMessages(list);
 
         // scroll down
         const messageContainer = document.getElementById("message-container");
@@ -49,7 +51,7 @@ const ContactPage = () => {
       });
     }
   }, [messages, socket]);
-  
+
   // send input message to the socket server
   const sendMessage = (event) => {
     event.preventDefault();
@@ -61,16 +63,40 @@ const ContactPage = () => {
     }
   }
 
+  // return a list of unique messages
+  const getUniqueMessage = (list) => {
+    let unique = [];
+    for (let i = 0; i < list.length - 1; i++) {
+      let isSame = false;
+      for (let j = i + 1; j < list.length; j++) {
+        if (list[i].user === list[j].user && list[i].body === list[j].body && list[i].date === list[j].date) {
+          isSame = true;
+          break;
+        }
+      }
+      if (!isSame) {
+        unique.push(list[i]);
+      }
+    }
+    unique.push(list[list.length - 1]);
+    return unique;
+  }
+
   // add initial chat messages from database when user first click on a chat
   const addInitialMessages = async (selected) => {
-    let printMessages = [];
+    
     // get all messages from the chat
     const response = await fetch(`http://localhost:3001/api/contact/get-chat?user=${getCookie('email')}&title=${selected}`)
     response.json().then(data => {
       if (data.data != null) {
-        const list = data.data.messages;
+        let list = data.data.messages;
+        let printMessages = [];
+
+        list = getUniqueMessage(list);
+
         for (let message of list) {
           let name = message.user;
+          
           if (message.user === getCookie('email')) {
             name = "You";
           }
@@ -84,7 +110,6 @@ const ContactPage = () => {
   // start the selected chat room
   const selectChat = (event) => {
     event.preventDefault();
-    const previousSelect = selectButton;
     setSelectButton(event.target.value);
 
     addInitialMessages(event.target.value);

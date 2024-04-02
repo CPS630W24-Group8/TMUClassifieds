@@ -106,27 +106,4 @@ router.route("/get-chat").get(async (request, response) => {
   }
 });
 
-// remove a message from the chat
-router.route("/remove-message").post(async (request, response) => {
-  const {user, room, message, date} = request.body;
-  try {
-    await chatRoom.findOneAndUpdate(
-      { users: user, title: room }, 
-      {$pop: { messages: {date: date, user: user, body: message }}},
-      { upsert: true }
-    ).then(data => 
-      response.status(200).json({
-        message: "User's message sucessfully added to chat",
-        data: data,
-      })
-    );
-  } catch (error) {
-    console.log("error: ", error.message);
-    return response.status(401).json({
-      message: "User's message not successfully added to chat",
-      error: error.mesage,
-    });
-  }
-});
-
 module.exports = router;
