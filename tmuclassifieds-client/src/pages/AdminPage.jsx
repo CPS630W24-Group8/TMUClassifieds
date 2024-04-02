@@ -86,7 +86,11 @@ const AdminPage = () => {
   if (!isAdmin) {
     return (
       <div>
+        <Navbar />
+        <Header title="Admin dashboard" />
+        <br />
         <p className="fs-5 text-center">Only administrators can view this page</p>
+        <Footer />
       </div>
     );
   }
