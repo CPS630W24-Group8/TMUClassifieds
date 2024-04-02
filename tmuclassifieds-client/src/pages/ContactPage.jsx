@@ -13,6 +13,7 @@ const ContactPage = () => {
   const [allChats, setAllChats] = useState();
   const [socket, setSocket] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [messageUpdating, setMessageUpdating] = useState(false);
 
   useEffect(() => {
     setLoggedIn(getCookie("email") !== "");
@@ -41,6 +42,7 @@ const ContactPage = () => {
             headers: { "Content-Type": "application/json" }
           });
         }
+        setMessageUpdating(true);
         let list = messages.concat([<ChatMessage user={name} message={data.message} date={data.date} />]);
         list = getUniqueMessage(list);
         setMessages(list);
@@ -51,6 +53,12 @@ const ContactPage = () => {
       });
     }
   }, [messages, socket]);
+
+  useEffect(() => {
+    if (messageUpdating) {
+      addInitialMessages(selectButton);
+    }
+  }, [messageUpdating, selectButton]);
 
   // send input message to the socket server
   const sendMessage = (event) => {
@@ -103,6 +111,7 @@ const ContactPage = () => {
           printMessages.push(<ChatMessage user={name} message={message.body} date={message.date} />);
         }
         setMessages(printMessages);
+        setMessageUpdating(false);
       }
     });
   }
@@ -110,8 +119,9 @@ const ContactPage = () => {
   // start the selected chat room
   const selectChat = (event) => {
     event.preventDefault();
+    setMessageUpdating(true);
     setSelectButton(event.target.value);
-
+    
     addInitialMessages(event.target.value);
     // start chatroom
     socket.emit('join-room', { room: event.target.value });
