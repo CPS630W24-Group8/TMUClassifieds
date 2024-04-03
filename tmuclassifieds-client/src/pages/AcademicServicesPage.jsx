@@ -39,7 +39,7 @@ const AcademicServicesPage = () => {
   // get academic services from the database
   const getServices = async () => {
     setIsLoading(true);
-    let result = await axios.get("http://localhost:3001/api/service/get-service");
+    let result = await axios.get("https://tmuclassifieds.onrender.com/api/service/get-service");
     result = result.data.data;
     const splitResult = splitListInto(result, 3);
     setAllServices(splitResult);

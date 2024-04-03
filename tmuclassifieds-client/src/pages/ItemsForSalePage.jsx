@@ -39,7 +39,7 @@ const ItemCardsForSalePage = () => {
   // get all items for sale from the database
   const getItems = async () => {
     setIsLoading(true);
-    let result = await axios.get("http://localhost:3001/api/item-sale/get-item");
+    let result = await axios.get("https://tmuclassifieds.onrender.com/api/item-sale/get-item");
     result = result.data.data;
     const splitResult = splitListInto(result, 3);
     setAllItems(splitResult);

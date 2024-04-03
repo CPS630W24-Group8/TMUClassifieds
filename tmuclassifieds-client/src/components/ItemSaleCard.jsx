@@ -24,7 +24,7 @@ const ItemSaleCard = (props) => {
 		const title = data.title;
 		
 		// find if room exist
-		await fetch("http://localhost:3001/api/contact/find-room", {
+		await fetch("https://tmuclassifieds.onrender.com/api/contact/find-room", {
 			method: 'POST',
 			body: JSON.stringify({ user: getCookie('email'), otherUser: otherUser, title: title }),
 			headers: { "Content-Type": "application/json" }
@@ -35,7 +35,7 @@ const ItemSaleCard = (props) => {
 			}
 			else if (data.data.length === 0) {
 				// add chat room to database
-				await fetch("http://localhost:3001/api/contact/add-room", {
+				await fetch("https://tmuclassifieds.onrender.com/api/contact/add-room", {
 					method: 'POST',
 					body: JSON.stringify({ user: getCookie('email'), otherUser: otherUser, title: title }),
 					headers: { "Content-Type": "application/json" }
@@ -80,7 +80,7 @@ const ItemSaleCard = (props) => {
 				const imageData = new FormData();
 				imageData.append("image", newImage);
 				const response = await axios.post(
-					"http://localhost:3001/api/item-wanted/upload",
+					"https://tmuclassifieds.onrender.com/api/item-wanted/upload",
 					imageData, {
 					headers: { "Content-Type": "multipart/form-data" },
 				});
@@ -88,7 +88,7 @@ const ItemSaleCard = (props) => {
 			}
 		}
 		console.log("image: ", file);
-		await fetch("http://localhost:3001/api/item-sale/edit-item", {
+		await fetch("https://tmuclassifieds.onrender.com/api/item-sale/edit-item", {
 			method: 'POST',
 			body: JSON.stringify({ id: props.item._id, title: newTitle, price: newPrice, description: newDesc, image: file, oldImage: props.item.image, tag: newTag }),
 			headers: { "Content-Type": "application/json" }

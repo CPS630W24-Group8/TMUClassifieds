@@ -20,7 +20,7 @@ const ContactPage = () => {
   }, []);
 
   useEffect(() => async () => {
-    const response = await fetch(`http://localhost:3001/api/contact/get-user-chat?user=${getCookie('email')}`)
+    const response = await fetch(`https://tmuclassifieds.onrender.com/api/contact/get-user-chat?user=${getCookie('email')}`)
     response.json().then(data => {
       setAllChats(data.data);
     });
@@ -36,7 +36,7 @@ const ContactPage = () => {
         let name = data.user;
         if (data.user === getCookie('email')) {
           name = "You";
-          await fetch("http://localhost:3001/api/contact/add-message", {
+          await fetch("https://tmuclassifieds.onrender.com/api/contact/add-message", {
             method: "POST",
             body: JSON.stringify({ user: data.user, room: data.room, message: data.message, date: data.date }),
             headers: { "Content-Type": "application/json" }
@@ -93,7 +93,7 @@ const ContactPage = () => {
   // add initial chat messages from database when user first click on a chat
   const addInitialMessages = async (selected) => {
     // get all messages from the chat
-    const response = await fetch(`http://localhost:3001/api/contact/get-chat?user=${getCookie('email')}&title=${selected}`)
+    const response = await fetch(`https://tmuclassifieds.onrender.com/api/contact/get-chat?user=${getCookie('email')}&title=${selected}`)
     response.json().then(data => {
       if (data.data != null) {
         setUsersInChat(data.data.users);
@@ -134,14 +134,14 @@ const ContactPage = () => {
   const leaveChat = async (event) => {
     event.preventDefault();
     if (window.confirm("Are you sure you want to leave the chat room?")) {
-      await fetch("http://localhost:3001/api/contact/remove-user", {
+      await fetch("https://tmuclassifieds.onrender.com/api/contact/remove-user", {
         method: 'POST',
         body: JSON.stringify({ user: getCookie("email"), room: selectButton }),
         headers: { "Content-Type": "application/json" }
       }).then(async (response) => {
         if (response.status === 200) {
           // delete the room from database if there are no users
-          await fetch("http://localhost:3001/api/contact/delete-room", {
+          await fetch("https://tmuclassifieds.onrender.com/api/contact/delete-room", {
             method: 'POST',
             body: JSON.stringify({ room: selectButton }),
             headers: { "Content-Type": "application/json" }

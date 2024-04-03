@@ -52,7 +52,7 @@ const AdminPage = () => {
 
   // get all items for sale from the database
   const getItemsSale = async () => {
-    let result = await axios.get("http://localhost:3001/api/item-sale/get-item");
+    let result = await axios.get("https://tmuclassifieds.onrender.com/api/item-sale/get-item");
     result = result.data.data;
     const splitResult = splitListInto(result, 3);
     setItemsSale(splitResult);
@@ -60,7 +60,7 @@ const AdminPage = () => {
 
   // get all items wanted from the database
   const getItemsWanted = async () => {
-    let result = await axios.get("http://localhost:3001/api/item-wanted/get-item");
+    let result = await axios.get("https://tmuclassifieds.onrender.com/api/item-wanted/get-item");
     result = result.data.data;
     const splitResult = splitListInto(result, 3);
     setItemsWanted(splitResult);
@@ -68,7 +68,7 @@ const AdminPage = () => {
 
   // get academic services from the database
   const getAcademicServices = async () => {
-    let result = await axios.get("http://localhost:3001/api/service/get-service");
+    let result = await axios.get("https://tmuclassifieds.onrender.com/api/service/get-service");
     result = result.data.data;
     const splitResult = splitListInto(result, 3);
     setAcademicServices(splitResult);

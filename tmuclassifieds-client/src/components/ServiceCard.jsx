@@ -20,7 +20,7 @@ const ServiceCard = (props) => {
 		const title = data.title;
 		
 		// find if room exist
-		await fetch("http://localhost:3001/api/contact/find-room", {
+		await fetch("https://tmuclassifieds.onrender.com/api/contact/find-room", {
 			method: 'POST',
 			body: JSON.stringify({ user: getCookie('email'), otherUser: otherUser, title: title }),
 			headers: { "Content-Type": "application/json" }
@@ -31,7 +31,7 @@ const ServiceCard = (props) => {
 			}
 			else if (data.data.length === 0) {
 				// add chat room to database
-				await fetch("http://localhost:3001/api/contact/add-room", {
+				await fetch("https://tmuclassifieds.onrender.com/api/contact/add-room", {
 					method: 'POST',
 					body: JSON.stringify({ user: getCookie('email'), otherUser: otherUser, title: title }),
 					headers: { "Content-Type": "application/json" }
@@ -59,7 +59,7 @@ const ServiceCard = (props) => {
 		document.querySelector("#cancel-button").click();
 		clearForm();
 
-		await fetch("http://localhost:3001/api/service/edit-service", {
+		await fetch("https://tmuclassifieds.onrender.com/api/service/edit-service", {
 			method: 'POST',
 			body: JSON.stringify({ id: props.service._id, title: newTitle, description: newDesc, tag: newTag }),
 			headers: { "Content-Type": "application/json" }
