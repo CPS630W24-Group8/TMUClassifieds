@@ -45,6 +45,11 @@ const AdminPage = () => {
     return newList;
   }
 
+  const count2DArray = (array) => {
+    if (!array) return 0;
+    return array.reduce((currentCount, row) => currentCount + row.length, 0);
+  }
+
   // get all items for sale from the database
   const getItemsSale = async () => {
     let result = await axios.get("http://localhost:3001/api/item-sale/get-item");
@@ -110,7 +115,7 @@ const AdminPage = () => {
                 <div className="accordion-item">
                   <h2 className="accordion-header">
                     <button className="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#itemsSaleCollapse" aria-expanded="true" aria-controls="itemsSaleCollapse">
-                      <strong>All items for sale</strong>
+                      <strong>All items for sale: {count2DArray(itemsSale)} items</strong>
                     </button>
                   </h2>
                   <div id="itemsSaleCollapse" className="accordion-collapse collapse show" data-bs-parent="#adminAccordion">
@@ -131,7 +136,7 @@ const AdminPage = () => {
                 <div className="accordion-item">
                   <h2 className="accordion-header">
                     <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#itemsWantedCollapse" aria-expanded="false" aria-controls="itemsWantedCollapse">
-                      <strong>All items wanted</strong>
+                      <strong>All items wanted: {count2DArray(itemsWanted)} items</strong>
                     </button>
                   </h2>
                   <div id="itemsWantedCollapse" className="accordion-collapse collapse" data-bs-parent="#adminAccordion">
@@ -152,7 +157,7 @@ const AdminPage = () => {
                 <div className="accordion-item">
                   <h2 className="accordion-header">
                     <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#servicesCollapse" aria-expanded="false" aria-controls="servicesCollapse">
-                      <strong>All academic services</strong>
+                      <strong>All academic services: {count2DArray(academicServices)} services</strong>
                     </button>
                   </h2>
                   <div id="servicesCollapse" className="accordion-collapse collapse" data-bs-parent="#adminAccordion">

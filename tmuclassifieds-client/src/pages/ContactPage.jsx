@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { io } from "https://cdn.socket.io/4.7.5/socket.io.esm.min.js";
 import Navbar from "../components/Navbar";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -29,7 +28,7 @@ const ContactPage = () => {
 
   useEffect(() => {
     if (socket === null) {
-      setSocket(io());
+      setSocket(window.io());
     }
     if (socket) {
       // message from server
@@ -201,7 +200,7 @@ const ContactPage = () => {
                     }
                   </div>
                   <div className="col text-end">
-                    <button type="button" class="btn btn-danger" onClick={leaveChat}>Leave chat</button>
+                    <button type="button" className="btn btn-danger" onClick={leaveChat}>Leave chat</button>
                   </div>
                 </div>
                 <div className="container">
