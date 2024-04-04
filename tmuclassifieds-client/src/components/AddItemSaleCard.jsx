@@ -36,14 +36,14 @@ const AddItemSaleCard = (props) => {
 			const imageData = new FormData();
 			imageData.append("image", newImage);
 			const response = await axios.post(
-				"http://localhost:3001/api/item-wanted/upload",
+				"https://tmuclassifieds.onrender.com/api/item-wanted/upload",
 				imageData, {
 				headers: { "Content-Type": "multipart/form-data" },
 			});
 			image = response.data.data;
 		}
 		console.log("image: ", image);
-		const result = await fetch("http://localhost:3001/api/item-sale/add-item", {
+		const result = await fetch("https://tmuclassifieds.onrender.com/api/item-sale/add-item", {
 			method: 'POST',
 			body: JSON.stringify({ title: newTitle, description: newDesc, image: image, user: props.user, price: newPrice, tag: newTag, location: newLocation }),
 			headers: { "Content-Type": "application/json" }
@@ -70,8 +70,8 @@ const AddItemSaleCard = (props) => {
 				{ types: ['geocode'] }
 			);
 
-		  };
-		  
+		};
+
 		const loadGoogleMapsScript = () => {
 			if (window.google) {
 				initAutocomplete();
@@ -98,12 +98,12 @@ const AddItemSaleCard = (props) => {
 		const onPlaceChanged = () => {
 			//Does not work atm
 			const geocoder = new window.google.maps.Geocoder();
-			geocoder.geocode({ 'address': document.getElementById('addressInput').value }, function(results, status) {
-			  if (status === 'OK') {
-				setNewLocation(`${results[0].geometry.location.lat()}, ${results[0].geometry.location.lng()}`);
-				console.log("location: " + results[0].geometry.location.lat(), results[0].geometry.location.lng())
-			  }
-			  //if not ok, don't set the location yet (do nothing)
+			geocoder.geocode({ 'address': document.getElementById('addressInput').value }, function (results, status) {
+				if (status === 'OK') {
+					setNewLocation(`${results[0].geometry.location.lat()}, ${results[0].geometry.location.lng()}`);
+					console.log("location: " + results[0].geometry.location.lat(), results[0].geometry.location.lng())
+				}
+				//if not ok, don't set the location yet (do nothing)
 			});
 		};
 
@@ -156,8 +156,8 @@ const AddItemSaleCard = (props) => {
 								<div className="mb-3">
 									<label htmlFor="addresInput" className="form-label">Location (Defaults to TMU Campus)</label>
 									<br></br>
-									<button type="button" id="getLocationBtn" className="location-button" onClick={getLocation}>Get Location</button>
-  									<input type="text" id="addressInput" className="address-input" placeholder="Enter an address"></input>
+									<button type="button" id="getLocationBtn" className="btn btn-secondary location-button" onClick={getLocation}>Get Location</button>
+									<input type="text" id="addressInput" className="form-control address-input" placeholder="Enter an address"></input>
 								</div>
 								<div className="modal-footer">
 									<button type="button" className="btn btn-danger" id="cancel-button" data-bs-dismiss="modal" onClick={clearModal}>Cancel</button>

@@ -27,38 +27,38 @@ const ProfilePage = () => {
 	const getItems = async () => {
 		setWaiting(true);
 		if (selectButton === "Items Wanted") {
-			await fetch(`http://localhost:3001/api/item-wanted/get-user-item?user=${getCookie('email')}`)
+			await fetch(`https://tmuclassifieds.onrender.com/api/item-wanted/get-user-item?user=${getCookie('email')}`)
 				.then(data => data.json())
 				.then(item => {
 					setAllItemsWanted(item.data);
 				});
 		} else if (selectButton === "Items for Sale") {
-			await fetch(`http://localhost:3001/api/item-sale/get-user-item?user=${getCookie('email')}`)
+			await fetch(`https://tmuclassifieds.onrender.com/api/item-sale/get-user-item?user=${getCookie('email')}`)
 				.then(data => data.json())
 				.then(item => {
 					setAllItemsSale(item.data);
 				});
 		} else if (selectButton === "Academic Services") {
-			await fetch(`http://localhost:3001/api/service/get-user-service?user=${getCookie('email')}`)
+			await fetch(`https://tmuclassifieds.onrender.com/api/service/get-user-service?user=${getCookie('email')}`)
 				.then(data => data.json())
 				.then(service => {
 					setAllServices(service.data);
 				});
 		} else if (selectButton === "Settings") {
 			// get all user's items wanted
-			await fetch(`http://localhost:3001/api/item-wanted/get-user-item?user=${getCookie('email')}`)
+			await fetch(`https://tmuclassifieds.onrender.com/api/item-wanted/get-user-item?user=${getCookie('email')}`)
 				.then(data => data.json())
 				.then(item => {
 					setAllItemsWanted(item.data);
 				});
 			// get all user's items for sale
-			await fetch(`http://localhost:3001/api/item-sale/get-user-item?user=${getCookie('email')}`)
+			await fetch(`https://tmuclassifieds.onrender.com/api/item-sale/get-user-item?user=${getCookie('email')}`)
 				.then(data => data.json())
 				.then(item => {
 					setAllItemsSale(item.data);
 				});
 			// get all user's services
-			await fetch(`http://localhost:3001/api/service/get-user-service?user=${getCookie('email')}`)
+			await fetch(`https://tmuclassifieds.onrender.com/api/service/get-user-service?user=${getCookie('email')}`)
 				.then(data => data.json())
 				.then(service => {
 					setAllServices(service.data);
@@ -79,7 +79,7 @@ const ProfilePage = () => {
 		} else {
 			message.className = "";
 			message.innerHTML = "";
-			await fetch("http://localhost:3001/api/auth/change-email", {
+			await fetch("https://tmuclassifieds.onrender.com/api/auth/change-email", {
 				method: "POST",
 				body: JSON.stringify({ oldEmail: getCookie("email"), newEmail: event.target[0].value }),
 				headers: { "Content-Type": "application/json" }
@@ -103,7 +103,7 @@ const ProfilePage = () => {
 			message.className = "";
 			message.innerHTML = "";
 
-			await fetch("http://localhost:3001/api/auth/change-password", {
+			await fetch("https://tmuclassifieds.onrender.com/api/auth/change-password", {
 				method: "POST",
 				body: JSON.stringify({ email: getCookie("email"), oldPassword: event.target[0].value, newPassword: event.target[1].value }),
 				headers: { "Content-Type": "application/json" }
@@ -122,42 +122,42 @@ const ProfilePage = () => {
 
 	const deleteAccount = async () => {
 		if (window.confirm("Are you sure you want to delete your account?")) {
-			await fetch("http://localhost:3001/api/auth/delete", {
+			await fetch("https://tmuclassifieds.onrender.com/api/auth/delete", {
 				method: 'POST',
 				body: JSON.stringify({ email: getCookie("email") }),
 				headers: { "Content-Type": "application/json" }
 			}).then(async response => {
 				if (response.status === 200) {
 					// delete all user's items wanted
-					await fetch("http://localhost:3001/api/item-wanted/delete-all", {
+					await fetch("https://tmuclassifieds.onrender.com/api/item-wanted/delete-all", {
 						method: 'POST',
 						body: JSON.stringify({ email: getCookie("email"), items: allItemsWanted }),
 						headers: { "Content-Type": "application/json" }
 					});
 
 					// delete all user's items for sale
-					await fetch("http://localhost:3001/api/item-sale/delete-all", {
+					await fetch("https://tmuclassifieds.onrender.com/api/item-sale/delete-all", {
 						method: 'POST',
 						body: JSON.stringify({ email: getCookie("email"), items: allItemsSale }),
 						headers: { "Content-Type": "application/json" }
 					});
 
 					// delete all user's service
-					await fetch("http://localhost:3001/api/service/delete-all", {
+					await fetch("https://tmuclassifieds.onrender.com/api/service/delete-all", {
 						method: 'POST',
 						body: JSON.stringify({ email: getCookie("email") }),
 						headers: { "Content-Type": "application/json" }
 					});
 
 					// remove user from all chat rooms
-					await fetch("http://localhost:3001/api/contact/remove-user-all-chat", {
+					await fetch("https://tmuclassifieds.onrender.com/api/contact/remove-user-all-chat", {
 						method: 'POST',
 						body: JSON.stringify({ user: getCookie("email") }),
 						headers: { "Content-Type": "application/json" }
 					}).then(async (response) => {
 						if (response.status === 200) {
 							// delete the room from database if there are no users
-							await fetch("http://localhost:3001/api/contact/delete-room", {
+							await fetch("https://tmuclassifieds.onrender.com/api/contact/delete-room", {
 								method: 'POST',
 								body: JSON.stringify({ room: selectButton }),
 								headers: { "Content-Type": "application/json" }
