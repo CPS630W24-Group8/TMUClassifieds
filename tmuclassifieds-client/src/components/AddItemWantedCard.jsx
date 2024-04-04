@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from 'react';
 import axios from "axios";
 
 const AddItemWantedCard = (props) => {
@@ -6,6 +6,7 @@ const AddItemWantedCard = (props) => {
 	const [newImage, setNewImage] = React.useState();
 	const [newDesc, setNewDesc] = React.useState("");
 	const [newTag, setNewTag] = React.useState("textbooks");
+	const [newLocation, setNewLocation] = React.useState("43.6583323, -79.3778051"); //Campus as default
 
 	const imageFile = React.useRef(null);
 
@@ -17,6 +18,7 @@ const AddItemWantedCard = (props) => {
 		setNewDesc("");
 		setNewImage();
 		setNewTag("textbooks");
+		setNewLocation("43.6583323, -79.3778051");
 	};
 
 	const onSubmit = async (event) => {
@@ -42,15 +44,75 @@ const AddItemWantedCard = (props) => {
 		console.log("image: ", image);
 		const result = await fetch("http://localhost:3001/api/item-wanted/add-item", {
 			method: 'POST',
-			body: JSON.stringify({ title: newTitle, description: newDesc, image: image, user: props.user, tag: newTag }),
+			body: JSON.stringify({ title: newTitle, description: newDesc, image: image, user: props.user, tag: newTag, location: newLocation }),
 			headers: { "Content-Type": "application/json" }
 		});
 		console.log("post: " + result.data);
 		window.location.reload();
 	};
 
+	const getLocation = () => {
+		if (navigator.geolocation) {
+		  navigator.geolocation.getCurrentPosition((position) => {
+			setNewLocation(`${position.coords.latitude}, ${position.coords.longitude}`);
+		  });
+		} else {
+		  console.error("Geolocation is not supported by this browser.");
+		}
+	};
+
+	useEffect(() => {
+		// Load the Google Places API script
+		const initAutocomplete = () => {
+			new window.google.maps.places.Autocomplete(
+			  document.getElementById('addressInput'),
+			  { types: ['geocode'] }
+			);
+		  };
+		  
+		const loadGoogleMapsScript = () => {
+			if (window.google) {
+				initAutocomplete();
+				return; // If already loaded, no need to add the script again
+			}
+			// Check if the script is already being loaded
+			if (!document.querySelector('script[src*="maps.googleapis.com"]')) {
+				const script = document.createElement("script");
+				script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAuL9uSvpsK1FoEE8K98UfANAqc1eP7hEs&libraries=places&callback=initAutocomplete`;
+				script.async = true;
+				script.defer = true;
+				document.body.appendChild(script);
+			}
+		};
+	
+		window.initAutocomplete = () => {
+		  new window.google.maps.places.Autocomplete(
+			document.getElementById('addressInput'),
+			{ types: ['geocode'] }
+		  ).addListener('place_changed', onPlaceChanged);
+		};
+		window.initAutocomplete = initAutocomplete;
+	
+		const onPlaceChanged = () => {
+			const geocoder = new window.google.maps.Geocoder();
+			geocoder.geocode({ 'address': document.getElementById('addressInput').value }, function(results, status) {
+			  if (status === 'OK') {
+				setNewLocation(`${results[0].geometry.location.lat()}, ${results[0].geometry.location.lng()}`);
+			  }
+			  //if not ok, don't set the location yet (do nothing)
+			});
+		};
+	
+		loadGoogleMapsScript();
+	  }, []);	 
+
 	return (
 		<div>
+			{/* Style used to keep the address autofill IN FRONT of the form, rather than behind*/}
+			<style>{`
+				.modal {z-index: 20;}
+				.modal-backdrop {z-index: 10;}
+			`}</style>
 			<button type="button" className="btn btn-primary" style={{ 'margin': '20px' }} data-bs-toggle="modal" data-bs-target="#addItemModal">
 				{props.buttonTitle}
 			</button>
@@ -82,6 +144,12 @@ const AddItemWantedCard = (props) => {
 										<option value="tools">Tools</option>
 										<option value="other">Other</option>
 									</select>
+								</div>
+								<div className="mb-3">
+									<label htmlFor="location" className="form-label">Location (Defaults to TMU Campus)</label>
+									<br></br>
+									<button type="button" id="getLocationBtn" className="location-button" onClick={getLocation}>Get Location</button>
+  									<input type="text" id="addressInput" className="address-input" placeholder="Enter an address"></input>
 								</div>
 								<div className="modal-footer">
 									<button type="button" className="btn btn-danger" id="cancel-button" data-bs-dismiss="modal" onClick={clearModal}>Cancel</button>

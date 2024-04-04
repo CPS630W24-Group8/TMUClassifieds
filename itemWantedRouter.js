@@ -22,13 +22,13 @@ router.route("/upload").post(upload.single("image"), async (request, response) =
 
 // create new items and add to database
 router.route("/add-item").post(async (request, response) => {
-  const {title, image, description, user, tag} = request.body;
+  const {title, image, description, user, tag, location} = request.body;
   console.log("image: "+image);
   console.log(title+ " - "+description);
 
   try {
     await itemWanted.create({
-      title, image, description, user, tag,
+      title, image, description, user, tag, location,
     }).then(item =>
       response.status(200).json({
         message: "Item sucessfully created",
@@ -113,7 +113,7 @@ router.route("/delete-item").post(async (request, response) => {
 
 // edit item
 router.route("/edit-item").post(async (request, response) => {
-  const update = { title: request.body.title, image: request.body.image, description: request.body.description, tag: request.body.tag };
+  const update = { title: request.body.title, image: request.body.image, description: request.body.description, tag, location: request.body.tag, location };
   console.log(update);
 
   // delete image file

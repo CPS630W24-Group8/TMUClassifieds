@@ -53,7 +53,7 @@ const AddItemSaleCard = (props) => {
 	};
 
 	const getLocation = () => {
-		if (navigator.geolocation) {
+		if (newLocation == null || navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition((position) => {
 				setNewLocation(`${position.coords.latitude}, ${position.coords.longitude}`);
 			});
@@ -69,17 +69,22 @@ const AddItemSaleCard = (props) => {
 				document.getElementById('addressInput'),
 				{ types: ['geocode'] }
 			);
-		};
 
+		  };
+		  
 		const loadGoogleMapsScript = () => {
 			if (window.google) {
 				initAutocomplete();
+				return; // If already loaded, no need to add the script again
 			}
-			const script = document.createElement("script");
-			script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAuL9uSvpsK1FoEE8K98UfANAqc1eP7hEs&libraries=places&callback=initAutocomplete`;
-			script.async = true;
-			script.defer = true;
-			document.body.appendChild(script);
+			// Check if the script is already being loaded
+			if (!document.querySelector('script[src*="maps.googleapis.com"]')) {
+				const script = document.createElement("script");
+				script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAuL9uSvpsK1FoEE8K98UfANAqc1eP7hEs&libraries=places&callback=initAutocomplete`;
+				script.async = true;
+				script.defer = true;
+				document.body.appendChild(script);
+			}
 		};
 
 		window.initAutocomplete = () => {
@@ -91,12 +96,14 @@ const AddItemSaleCard = (props) => {
 		window.initAutocomplete = initAutocomplete;
 
 		const onPlaceChanged = () => {
+			//Does not work atm
 			const geocoder = new window.google.maps.Geocoder();
-			geocoder.geocode({ 'address': document.getElementById('addressInput').value }, function (results, status) {
-				if (status === 'OK') {
-					setNewLocation(`${results[0].geometry.location.lat()}, ${results[0].geometry.location.lng()}`);
-				}
-				//if not ok, don't set the location yet (do nothing)
+			geocoder.geocode({ 'address': document.getElementById('addressInput').value }, function(results, status) {
+			  if (status === 'OK') {
+				setNewLocation(`${results[0].geometry.location.lat()}, ${results[0].geometry.location.lng()}`);
+				console.log("location: " + results[0].geometry.location.lat(), results[0].geometry.location.lng())
+			  }
+			  //if not ok, don't set the location yet (do nothing)
 			});
 		};
 
@@ -149,8 +156,8 @@ const AddItemSaleCard = (props) => {
 								<div className="mb-3">
 									<label htmlFor="addresInput" className="form-label">Location (Defaults to TMU Campus)</label>
 									<br></br>
-									<input type="text" id="addressInput" className="form-control address-input" placeholder="Enter an address"></input>
-									<button type="button" id="getLocationBtn" className="btn btn-secondary location-button" onClick={getLocation}>Get Location</button>
+									<button type="button" id="getLocationBtn" className="location-button" onClick={getLocation}>Get Location</button>
+  									<input type="text" id="addressInput" className="address-input" placeholder="Enter an address"></input>
 								</div>
 								<div className="modal-footer">
 									<button type="button" className="btn btn-danger" id="cancel-button" data-bs-dismiss="modal" onClick={clearModal}>Cancel</button>

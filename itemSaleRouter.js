@@ -5,13 +5,14 @@ const fs = require('fs');
 
 // create new items and add to database
 router.route("/add-item").post(async (request, response) => {
-  const { title, image, description, user, price, tag } = request.body; 
+  const { title, image, description, user, price, tag, location } = request.body; 
   console.log("image: "+image);
   console.log(title+ " - "+description);
+  console.log("location (from router) " + location);
 
   try {
     await itemSale.create({
-      title, image, description, user, price, tag, 
+      title, image, description, user, price, tag, location,
     }).then(item =>
       response.status(200).json({
         message: "Item successfully created",
@@ -98,8 +99,8 @@ router.route("/delete-item").post(async (request, response) => {
 
 // edit item
 router.route("/edit-item").post(async (request, response) => {
-  const { id, title, image, description, price, tag } = request.body;
-  const update = { title, image, description, price, tag }; 
+  const { id, title, image, description, price, tag, location } = request.body;
+  const update = { title, image, description, price, tag, location }; 
   console.log(update);
 
   // delete image file
