@@ -18,7 +18,7 @@ const AddServiceCard = (props) => {
 		document.querySelector("#cancel-button").click();
 		clearModal();
 
-		const result = await fetch("https://tmuclassifieds.onrender.com/api/service/add-service", {
+		const result = await fetch("http://localhost:3001/api/service/add-service", {
 			method: 'POST',
 			body: JSON.stringify({ title: newTitle, description: newDesc, user: props.user, tag: newTag }),
 			headers: { "Content-Type": "application/json" }

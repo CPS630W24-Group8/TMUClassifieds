@@ -39,7 +39,7 @@ const ItemsWantedPage = () => {
   // get all items wanted from the database
   const getItems = async () => {
     setIsLoading(true);
-    let result = await axios.get("https://tmuclassifieds.onrender.com/api/item-wanted/get-item");
+    let result = await axios.get("http://localhost:3001/api/item-wanted/get-item");
     result = result.data.data;
     const splitResult = splitListInto(result, 3);
     setAllItems(splitResult);

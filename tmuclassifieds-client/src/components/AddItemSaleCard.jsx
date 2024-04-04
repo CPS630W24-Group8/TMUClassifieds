@@ -36,16 +36,16 @@ const AddItemSaleCard = (props) => {
 			const imageData = new FormData();
 			imageData.append("image", newImage);
 			const response = await axios.post(
-				"https://tmuclassifieds.onrender.com/api/item-wanted/upload",
+				"http://localhost:3001/api/item-wanted/upload",
 				imageData, {
 				headers: { "Content-Type": "multipart/form-data" },
 			});
 			image = response.data.data;
 		}
 		console.log("image: ", image);
-		const result = await fetch("https://tmuclassifieds.onrender.com/api/item-sale/add-item", {
+		const result = await fetch("http://localhost:3001/api/item-sale/add-item", {
 			method: 'POST',
-			body: JSON.stringify({ title: newTitle, description: newDesc, image: image, user: props.user, price: newPrice, tag: newTag, location: newLocation  }),
+			body: JSON.stringify({ title: newTitle, description: newDesc, image: image, user: props.user, price: newPrice, tag: newTag, location: newLocation }),
 			headers: { "Content-Type": "application/json" }
 		});
 		console.log("post: " + result.data);
@@ -54,11 +54,11 @@ const AddItemSaleCard = (props) => {
 
 	const getLocation = () => {
 		if (navigator.geolocation) {
-		  navigator.geolocation.getCurrentPosition((position) => {
-			setNewLocation(`${position.coords.latitude}, ${position.coords.longitude}`);
-		  });
+			navigator.geolocation.getCurrentPosition((position) => {
+				setNewLocation(`${position.coords.latitude}, ${position.coords.longitude}`);
+			});
 		} else {
-		  console.error("Geolocation is not supported by this browser.");
+			console.error("Geolocation is not supported by this browser.");
 		}
 	};
 
@@ -66,42 +66,42 @@ const AddItemSaleCard = (props) => {
 		// Load the Google Places API script
 		const initAutocomplete = () => {
 			new window.google.maps.places.Autocomplete(
-			  document.getElementById('addressInput'),
-			  { types: ['geocode'] }
+				document.getElementById('addressInput'),
+				{ types: ['geocode'] }
 			);
-		  };
-		  
-		const loadGoogleMapsScript = () => {
-		  if (window.google) {
-			initAutocomplete();
-		  }
-		  const script = document.createElement("script");
-		  script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAuL9uSvpsK1FoEE8K98UfANAqc1eP7hEs&libraries=places&callback=initAutocomplete`;
-		  script.async = true;
-		  script.defer = true;
-		  document.body.appendChild(script);
 		};
-	
+
+		const loadGoogleMapsScript = () => {
+			if (window.google) {
+				initAutocomplete();
+			}
+			const script = document.createElement("script");
+			script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyAuL9uSvpsK1FoEE8K98UfANAqc1eP7hEs&libraries=places&callback=initAutocomplete`;
+			script.async = true;
+			script.defer = true;
+			document.body.appendChild(script);
+		};
+
 		window.initAutocomplete = () => {
-		  new window.google.maps.places.Autocomplete(
-			document.getElementById('addressInput'),
-			{ types: ['geocode'] }
-		  ).addListener('place_changed', onPlaceChanged);
+			new window.google.maps.places.Autocomplete(
+				document.getElementById('addressInput'),
+				{ types: ['geocode'] }
+			).addListener('place_changed', onPlaceChanged);
 		};
 		window.initAutocomplete = initAutocomplete;
-	
+
 		const onPlaceChanged = () => {
 			const geocoder = new window.google.maps.Geocoder();
-			geocoder.geocode({ 'address': document.getElementById('addressInput').value }, function(results, status) {
-			  if (status === 'OK') {
-				setNewLocation(`${results[0].geometry.location.lat()}, ${results[0].geometry.location.lng()}`);
-			  }
-			  //if not ok, don't set the location yet (do nothing)
+			geocoder.geocode({ 'address': document.getElementById('addressInput').value }, function (results, status) {
+				if (status === 'OK') {
+					setNewLocation(`${results[0].geometry.location.lat()}, ${results[0].geometry.location.lng()}`);
+				}
+				//if not ok, don't set the location yet (do nothing)
 			});
 		};
-	
+
 		loadGoogleMapsScript();
-	  }, []);	 
+	}, []);
 
 	return (
 		<div>
@@ -147,10 +147,10 @@ const AddItemSaleCard = (props) => {
 									</select>
 								</div>
 								<div className="mb-3">
-									<label htmlFor="location" className="form-label">Location (Defaults to TMU Campus)</label>
+									<label htmlFor="addresInput" className="form-label">Location (Defaults to TMU Campus)</label>
 									<br></br>
-									<button type="button" id="getLocationBtn" className="location-button" onClick={getLocation}>Get Location</button>
-  									<input type="text" id="addressInput" class="address-input" placeholder="Enter an address"></input>
+									<input type="text" id="addressInput" className="form-control address-input" placeholder="Enter an address"></input>
+									<button type="button" id="getLocationBtn" className="btn btn-secondary location-button" onClick={getLocation}>Get Location</button>
 								</div>
 								<div className="modal-footer">
 									<button type="button" className="btn btn-danger" id="cancel-button" data-bs-dismiss="modal" onClick={clearModal}>Cancel</button>

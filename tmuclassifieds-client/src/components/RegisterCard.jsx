@@ -36,7 +36,7 @@ const RegisterCard = ({ onRegistered }) => {
     if (!validateForm()) return;
 
     // Proceed with register
-    const response = await fetch("https://tmuclassifieds.onrender.com/api/auth/register", {
+    const response = await fetch("http://localhost:3001/api/auth/register", {
       method: "POST",
       body: JSON.stringify({ email: email, password: password }),
       headers: { "Content-Type": "application/json" }
